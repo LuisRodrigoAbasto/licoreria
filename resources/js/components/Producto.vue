@@ -55,6 +55,7 @@
                 <button type="submit" @click="listar(1,buscar,criterio)" class="btn btn-primary">
                   <i class="fa fa-search"></i> Buscar
                 </button>
+                
               </div>
             </div>
           </div>
@@ -335,7 +336,7 @@ export default {
         .get(url)
         .then(function(response) {
           var respuesta = response.data;
-          me.arrayData = respuesta.clientes.data;
+          me.arrayData = respuesta.productos.data;
           me.pagination = respuesta.pagination;
         })
         .catch(function(error) {
@@ -352,7 +353,7 @@ export default {
     selectCategoria(search,loading){
       let me=this;
       loading(true);
-      var url = "/categoria/selectCategoria?filtro=" + search;
+      var url = "/categoria/selectCategoria?filtro="+ search;
       axios
         .get(url)
         .then(function(response) {

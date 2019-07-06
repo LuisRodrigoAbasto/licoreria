@@ -26,6 +26,7 @@ window.Vue = require('vue');
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
 Vue.component('cliente', require('./components/Cliente.vue').default);
 Vue.component('categoria', require('./components/Categoria.vue').default);
 Vue.component('producto', require('./components/Producto.vue').default);
@@ -35,4 +36,3 @@ const app = new Vue({
         menu : 0
     }
 });
-

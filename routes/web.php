@@ -28,6 +28,8 @@ Route::put('/cliente/actualizar', 'ClienteController@update');
 Route::put('/cliente/desactivar', 'ClienteController@desactivar');
 Route::put('/cliente/activar', 'ClienteController@activar');
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/producto', 'ProductoController@index');
+Route::post('/producto/registrar', 'ProductoController@store');
+Route::put('/producto/actualizar', 'ProductoController@update');
+Route::put('/producto/desactivar', 'ProductoController@desactivar');
+Route::put('/producto/activar', 'ProductoController@activar');

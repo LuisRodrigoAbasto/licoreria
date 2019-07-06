@@ -11,28 +11,25 @@ const mix = require('laravel-mix');
  |
  */
 
-// mix.js('resources/js/app.js', 'public/js')
-//     .sass('resources/sass/app.scss', 'public/css');
 
 mix.styles([
-  'resources/plantilla/css/coreui-icons.min.css',
-  'resources/plantilla/css/flag-icon.min.css',
-  'resources/plantilla/css/font-awesome.min.css',
-  'resources/plantilla/css/simple-line-icons.css',
-  'resources/plantilla/css/style.css',
-  'resources/plantilla/css/pace.min.css'
- ], 'public/css/plantilla.css')
- .scripts([
-   'resources/plantilla/js/jquery.min.js',
-   'resources/plantilla/js/popper.min.js',
-  //  'resources/plantilla/js/bootstrap.min.js',
-   'resources/plantilla/js/pace.min.js',
-   'resources/plantilla/js/perfect-scrollbar.min.js',
-   'resources/plantilla/js/coreui.min.js',
-   'resources/plantilla/js/Chart.min.js',
-   'resources/plantilla/js/custom-tooltips.min.js',
-   'resources/plantilla/js/main.js',
-   'resources/plantilla/js/sweetalert2.all.min.js'
- ], 'public/js/plantilla.js')
- .js(['resources/js/app.js'],'public/js/app.js');
- 
+    'resources/plantilla/css/coreui-icons.min.css',
+    'resources/plantilla/css/flag-icon.min.css',
+    'resources/plantilla/css/font-awesome.min.css',
+    'resources/plantilla/css/simple-line-icons.css',
+    'resources/plantilla/css/style.css',
+    'resources/plantilla/css/pace.min.css'
+   ], 'public/css/plantilla.css')
+   .scripts([
+     'resources/plantilla/js/jquery.min.js',
+     'resources/plantilla/js/popper.min.js',
+    //  'resources/plantilla/js/bootstrap.min.js',
+     'resources/plantilla/js/pace.min.js',
+     'resources/plantilla/js/perfect-scrollbar.min.js',
+     'resources/plantilla/js/coreui.min.js',
+     'resources/plantilla/js/Chart.min.js',
+     'resources/plantilla/js/custom-tooltips.min.js',
+     'resources/plantilla/js/main.js',
+     'resources/plantilla/js/sweetalert2.all.min.js'
+   ], 'public/js/plantilla.js')
+   .js(['resources/js/app.js'],'public/js/app.js');

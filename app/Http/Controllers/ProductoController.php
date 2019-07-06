@@ -13,7 +13,7 @@ class ProductoController extends Controller
 
         $buscar = $request->buscar;
         $criterio = $request->criterio;
-        $productos = Producto::where('estado','=','0')->where($criterio, 'like','%'.$buscar.'%')->orderBy('id','desc')->paginate(10);
+        $productos = Producto::where('estado','=','1')->where($criterio, 'like','%'.$buscar.'%')->orderBy('id','desc')->paginate(10);
         return [
             'pagination' => [
                 'total'        => $productos->total(),
