@@ -26,12 +26,12 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> Cliente
+          <i class="fa fa-align-justify"></i>Categoria
           <button
             type="button"
             data-toggle="modal"
             data-target="#ModalLong"
-            @click="abrirModal('cliente','registrar')"
+            @click="abrirModal('categoria','registrar')"
             class="btn btn-secondary"
           >
             <i class="icon-plus"></i>&nbsp;Nuevo
@@ -43,14 +43,13 @@
               <div class="input-group">
                 <select class="form-control col-md-3" v-model="criterio">
                   <option value="nombre">Nombre</option>
-                  <option value="apellido">Apellido</option>
                 </select>
                 <input
                   type="text"
                   v-model="buscar"
                   @keyup.enter="listar(1,buscar,criterio)"
                   class="form-control"
-                  placeholder="Buscar Cliente"
+                  placeholder="Buscar Categoria"
                 />
                 <button type="submit" @click="listar(1,buscar,criterio)" class="btn btn-primary">
                   <i class="fa fa-search"></i> Buscar
@@ -62,11 +61,7 @@
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Nombre Apellido</th>
-                <th>Telefono</th>
-                <th>CI</th>
-                <th>Sexo</th>
-                <th>Direccion</th>
+                <th>Nombre</th>
                 <th>Estado</th>
                 <th>Opciones</th>
               </tr>
@@ -74,11 +69,7 @@
             <tbody>
               <tr v-for="data in arrayData" :key="data.id">
                 <td>{{ data.id }}</td>
-                <td>{{data.nombre+' '+data.apellido}}</td>
-                <td>{{ data.ci }}</td>
-                <td>{{ data.telefono }}</td>
-                <td>{{ data.sexo }}</td>
-                <td>{{ data.direccion }}</td>
+                <td>{{data.nombre}}</td>
                 <td>
                   <div v-if="data.estado">
                     <span class="badge badge-success">Activo</span>
@@ -92,7 +83,7 @@
                     type="button"
                     data-toggle="modal"
                     data-target="#ModalLong"
-                    @click="abrirModal('cliente','actualizar',data)"
+                    @click="abrirModal('categoria','actualizar',data)"
                     class="btn btn-warning btn-sm"
                   >
                     <i class="icon-pencil"></i>
@@ -185,55 +176,6 @@
                   />
                 </div>
               </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input">Apellido</label>
-                <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="apellido"
-                    class="form-control"
-                    placeholder="Apellido............"
-                  />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input">Telefono</label>
-                <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="telefono"
-                    class="form-control"
-                    placeholder="Telefono.............."
-                  />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input">C.I.</label>
-                <div class="col-md-9">
-                  <input type="text" v-model="ci" class="form-control" placeholder="CI............" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input">Direccion</label>
-                <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="direccion"
-                    class="form-control"
-                    placeholder="Direccion............"
-                  />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input">Sexo</label>
-                <div class="col-md-9">
-                  <select class="form-control col-md-12" v-model="sexo">
-                    <option value>Seleccione</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
-                </div>
-              </div>
               <div v-show="errorMostrar" class="form-group row">
                 <div class="text-center text-error">
                   <div v-for="error in errorMostrarMsj" :key="error" v-text="error"></div>
@@ -274,11 +216,6 @@ export default {
     return {
       id: 0,
       nombre: "",
-      apellido: "",
-      telefono: "",
-      ci: "",
-      sexo: "",
-      direccion: "",
       arrayData: [],
       modal: 0,
       tituloModal: "",
@@ -327,12 +264,12 @@ export default {
     listar(page, buscar, criterio) {
       let me = this;
       var url =
-        "/cliente?page=" + page + "&buscar=" + buscar + "&criterio=" + criterio;
+        "/categoria?page=" + page + "&buscar=" + buscar;
       axios
         .get(url)
         .then(function(response) {
           var respuesta = response.data;
-          me.arrayData = respuesta.clientes.data;
+          me.arrayData = respuesta.categorias.data;
           me.pagination = respuesta.pagination;
         })
         .catch(function(error) {
@@ -353,13 +290,8 @@ export default {
       let me = this;
 
       axios
-        .post("/cliente/registrar", {
+        .post("/categoria/registrar", {
           nombre: this.nombre,
-          apellido: this.apellido,
-          telefono: this.telefono,
-          ci: this.ci,
-          sexo: this.sexo,
-          direccion: this.direccion
         })
         .then(function(response) {
           me.cerrarModal();
@@ -374,13 +306,9 @@ export default {
         return;
       }
       let me = this;
-      axios.put("/cliente/actualizar", {
+      axios.put("/categoria/actualizar", {
           nombre: this.nombre,
           apellido: this.apellido,
-          telefono: this.telefono,
-          ci: this.ci,
-          direccion: this.direccion,
-          sexo: this.sexo,
           id: this.id
         })
         .then(function(response) {
@@ -403,7 +331,7 @@ export default {
 
       swalWithBootstrapButtons
         .fire({
-          title: "Estas Seguro de Desactivar al Cliente?",
+          title: "Estas Seguro de Desactivar al Categoria?",
           text: "Si Desactiva no estara en la Lista!",
           type: "warning",
           showCancelButton: true,
@@ -416,7 +344,7 @@ export default {
             let me = this;
 
                 axios
-                  .put("/cliente/desactivar", {
+                  .put("/categoria/desactivar", {
                     id: id
                   })
                   .then(function(response) {
@@ -424,7 +352,7 @@ export default {
             Swal.fire({
               position: "center",
               type: "success",
-              title: "El Cliente ha sido Desactivado",
+              title: "El Categoria ha sido Desactivado",
               showConfirmButton: false,
               timer: 1000
             })
@@ -457,7 +385,7 @@ export default {
 
       swalWithBootstrapButtons
         .fire({
-          title: "Estas Seguro de Activar al Cliente?",
+          title: "Estas Seguro de Activar al Categoria?",
           text: "Si Activa Estara en la Lista!",
           type: "warning",
           showCancelButton: true,
@@ -470,7 +398,7 @@ export default {
             let me = this;
 
                 axios
-                  .put("/cliente/activar", {
+                  .put("/categoria/activar", {
                     id: id
                   })
                   .then(function(response) {
@@ -478,7 +406,7 @@ export default {
             Swal.fire({
               position: "center",
               type: "success",
-              title: "El Cliente ha sido Activado",
+              title: "El Categoria ha sido Activado",
               showConfirmButton: false,
               timer: 1000
             })
@@ -506,9 +434,7 @@ export default {
       this.errorMostrarMsj = [];
 
       if (!this.nombre)
-        this.errorMostrarMsj.push("Ingrese el Nombre del Cliente");
-      if (!this.apellido)
-        this.errorMostrarMsj.push("Ingrese el Apellido del Cliente");
+        this.errorMostrarMsj.push("Ingrese el Nombre de la Categoria");
       if (this.errorMostrarMsj.length) this.errorMostrar = 1;
       return this.errorMostrar;
     },
@@ -523,32 +449,22 @@ export default {
     },
     abrirModal(modelo, accion, data = []) {
       switch (modelo) {
-        case "cliente": {
+        case "categoria": {
           switch (accion) {
             case "registrar": {
               this.modal = 1;
-              this.tituloModal = "Registrar Cliente";
+              this.tituloModal = "Registrar Categoria";
               this.nombre = "";
-              this.apellido = "";
-              this.telefono = "";
-              this.ci = "";
-              this.sexo = "";
-              this.direccion = "";
               this.tipoAccion = 1;
               break;
             }
             case "actualizar": {
               // console.log(data);
               this.modal = 1;
-              this.tituloModal = "Actualizar Cliente";
+              this.tituloModal = "Actualizar Categoria";
               this.tipoAccion = 2;
               this.id = data["id"];
               this.nombre = data["nombre"];
-              this.apellido = data["apellido"];
-              this.telefono = data["telefono"];
-              this.ci = data["ci"];
-              this.sexo = data["sexo"];
-              this.direccion = data["direccion"];
               break;
             }
           }

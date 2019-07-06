@@ -11,8 +11,7 @@ class CategoriaController extends Controller
     {
         // if (!$request->ajax()) return redirect('/');
         $buscar = $request->buscar;
-        $criterio = $request->criterio;
-        $categorias = Categoria::where('estado','=',$criterio)->where('nombre', 'like', '%'. $buscar . '%')->orderBy('id', 'desc')->paginate(10);               
+        $categorias = Categoria::where('nombre', 'like', '%'. $buscar . '%')->orderBy('id', 'desc')->paginate(10);               
         return [
             'pagination' => [
                 'total'        => $categorias->total(),

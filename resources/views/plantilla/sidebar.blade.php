@@ -1,50 +1,45 @@
 <div class="sidebar">
         <nav class="sidebar-nav">
           <ul class="nav">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">
+            <li class="nav-item" @click="menu=0">
+              <a class="nav-link" href="#">
                 <i class="nav-icon icon-speedometer"></i> Dashboard
                 <span class="badge badge-primary">NEW</span>
               </a>
             </li>
-            <li class="nav-title">MAntenimiento</li>
-            <li class="nav-item">
-              <a class="nav-link" href="colors.html">
-                <i class="nav-icon icon-drop"></i> Colors</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="typography.html">
-                <i class="nav-icon icon-pencil"></i> Typography</a>
-            </li>
+
             <li class="nav-title">Mantenimiento</li>
             <li class="nav-item nav-dropdown">
               <a class="nav-link nav-dropdown-toggle" href="#">
-                <i class="nav-icon icon-puzzle"></i> Ventas</a>
+                <i class="nav-icon icon-puzzle"></i> Productos</a>
               <ul class="nav-dropdown-items">
-                <li @click="menu=5" class="nav-item">
+                <li @click="menu=1" class="nav-item">
                   <a class="nav-link" href="#">
-                    <i class="nav-icon icon-puzzle"></i>Ventas</a>
+                    <i class="nav-icon icon-puzzle"></i>Producto</a>
                 </li>
-                
+                <li class="nav-item" @click="menu=2">
+                  <a class="nav-link" href="#">
+                    <i class="nav-icon icon-pencil"></i> Categoria</a>
+                </li>
               </ul>
             </li>
             <li class="nav-item nav-dropdown">
               <a class="nav-link nav-dropdown-toggle" href="#">
-                <i class="nav-icon icon-cursor"></i> Buttons</a>
+                <i class="nav-icon icon-cursor"></i> Ventas</a>
               <ul class="nav-dropdown-items">
-                <li class="nav-item">
-                  <a class="nav-link" href="buttons/buttons.html">
-                    <i class="nav-icon icon-cursor"></i> Buttons</a>
+                <li class="nav-item" @click="menu=3">
+                  <a class="nav-link" href="#">
+                    <i class="nav-icon icon-cursor"></i> Venta</a>
                 </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="buttons/button-group.html">
-                    <i class="nav-icon icon-cursor"></i> Buttons Group</a>
+                <li class="nav-item" @click="menu=4">
+                  <a class="nav-link" href="#">
+                    <i class="nav-icon icon-cursor"></i> Cliente</a>
                 </li>
                
               </ul>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="charts.html">
+            <li class="nav-item" @click="menu=6">
+              <a class="nav-link" href="#">
                 <i class="nav-icon icon-pie-chart"></i> Charts</a>
             </li>
             <li class="nav-item nav-dropdown">

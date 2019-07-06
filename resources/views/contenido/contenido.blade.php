@@ -1,15 +1,17 @@
 @extends('index')
 @section('contenido')
     <template v-if="menu==0">
-    <!-- <venta></venta> -->
+    HOLA MUNDO
     </template>
 
+
     <template v-if="menu==1">
-    <venta></venta>
+        <producto></producto>
+    
     </template>
 
     <template v-if="menu==2">
-    <venta></venta>
+        <categoria></categoria>
     </template>
 
     <template v-if="menu==3">
@@ -17,10 +19,6 @@
     </template>
 
     <template v-if="menu==4">
-    <venta></venta>
-    </template>
-
-    <template v-if="menu==5">
         <cliente></cliente>
     </template>
 

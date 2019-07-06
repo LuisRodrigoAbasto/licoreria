@@ -27,6 +27,8 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 Vue.component('cliente', require('./components/Cliente.vue').default);
+Vue.component('categoria', require('./components/Categoria.vue').default);
+Vue.component('producto', require('./components/Producto.vue').default);
 const app = new Vue({
     el: '#app',
     data :{

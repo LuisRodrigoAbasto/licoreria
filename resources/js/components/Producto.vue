@@ -26,12 +26,12 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> Cliente
+          <i class="fa fa-align-justify"></i> Producto
           <button
             type="button"
             data-toggle="modal"
             data-target="#ModalLong"
-            @click="abrirModal('cliente','registrar')"
+            @click="abrirModal('producto','registrar')"
             class="btn btn-secondary"
           >
             <i class="icon-plus"></i>&nbsp;Nuevo
@@ -43,14 +43,14 @@
               <div class="input-group">
                 <select class="form-control col-md-3" v-model="criterio">
                   <option value="nombre">Nombre</option>
-                  <option value="apellido">Apellido</option>
+                  <option value="descripcion">Descripcion</option>
                 </select>
                 <input
                   type="text"
                   v-model="buscar"
                   @keyup.enter="listar(1,buscar,criterio)"
                   class="form-control"
-                  placeholder="Buscar Cliente"
+                  placeholder="Buscar Producto"
                 />
                 <button type="submit" @click="listar(1,buscar,criterio)" class="btn btn-primary">
                   <i class="fa fa-search"></i> Buscar
@@ -62,11 +62,11 @@
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Nombre Apellido</th>
-                <th>Telefono</th>
-                <th>CI</th>
-                <th>Sexo</th>
-                <th>Direccion</th>
+                <th>Categoria</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Imagen</th>
+                <th>Stock</th>
                 <th>Estado</th>
                 <th>Opciones</th>
               </tr>
@@ -74,11 +74,11 @@
             <tbody>
               <tr v-for="data in arrayData" :key="data.id">
                 <td>{{ data.id }}</td>
-                <td>{{data.nombre+' '+data.apellido}}</td>
-                <td>{{ data.ci }}</td>
-                <td>{{ data.telefono }}</td>
-                <td>{{ data.sexo }}</td>
-                <td>{{ data.direccion }}</td>
+                <td>{{ data.categoria }}</td>
+                <td>{{ data.nombre }}</td>
+                <td>{{ data.descripcion }}</td>
+                <td>{{ data.imagen }}</td>
+                <td>{{ data.stock }}</td>
                 <td>
                   <div v-if="data.estado">
                     <span class="badge badge-success">Activo</span>
@@ -92,7 +92,7 @@
                     type="button"
                     data-toggle="modal"
                     data-target="#ModalLong"
-                    @click="abrirModal('cliente','actualizar',data)"
+                    @click="abrirModal('producto','actualizar',data)"
                     class="btn btn-warning btn-sm"
                   >
                     <i class="icon-pencil"></i>
@@ -186,54 +186,52 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input">Apellido</label>
+                <label class="col-md-3 form-control-label" for="text-input">Descripcion</label>
                 <div class="col-md-9">
                   <input
                     type="text"
-                    v-model="apellido"
+                    v-model="descripcion"
                     class="form-control"
-                    placeholder="Apellido............"
+                    placeholder="Descripcion............"
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input">Telefono</label>
+                <label class="col-md-3 form-control-label" for="text-input">Imagen</label>
                 <div class="col-md-9">
                   <input
                     type="text"
-                    v-model="telefono"
+                    v-model="imagen"
                     class="form-control"
-                    placeholder="Telefono.............."
+                    placeholder="Imagen.............."
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input">C.I.</label>
-                <div class="col-md-9">
-                  <input type="text" v-model="ci" class="form-control" placeholder="CI............" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input">Direccion</label>
+                <label class="col-md-3 form-control-label" for="text-input">Stock</label>
                 <div class="col-md-9">
                   <input
-                    type="text"
-                    v-model="direccion"
+                    type="number"
+                    min="0"
+                    v-model="stock"
                     class="form-control"
-                    placeholder="Direccion............"
+                    placeholder="Stock............"
                   />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input">Sexo</label>
+                <label class="col-md-3 form-control-label" for="text-input">Categoria</label>
                 <div class="col-md-9">
-                  <select class="form-control col-md-12" v-model="sexo">
-                    <option value>Seleccione</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                  </select>
+                  <v-select
+                    :on-search="selectCategoria"
+                    label="nombre"
+                    :options="arrayCategoria"
+                    placeholder="Buscar Categoria..."
+                    :onChange="getDatosCategoria"
+                  ></v-select>
                 </div>
               </div>
+
               <div v-show="errorMostrar" class="form-group row">
                 <div class="text-center text-error">
                   <div v-for="error in errorMostrarMsj" :key="error" v-text="error"></div>
@@ -269,17 +267,19 @@
   </main>
 </template>
 <script>
+import VSelect from "vue-select";
 export default {
   data() {
     return {
       id: 0,
       nombre: "",
-      apellido: "",
-      telefono: "",
-      ci: "",
-      sexo: "",
-      direccion: "",
+      descripcion: "",
+      imagen: "",
+      stock: "",
+      idCategoria: 0,
+      categoria: "",
       arrayData: [],
+      arrayCategoria: [],
       modal: 0,
       tituloModal: "",
       tipoAccion: 0,
@@ -297,6 +297,9 @@ export default {
       criterio: "nombre",
       buscar: ""
     };
+  },
+  components: {
+    VSelect
   },
   computed: {
     isActived: function() {
@@ -327,7 +330,7 @@ export default {
     listar(page, buscar, criterio) {
       let me = this;
       var url =
-        "/cliente?page=" + page + "&buscar=" + buscar + "&criterio=" + criterio;
+        "/producto?page=" + page + "&buscar=" + buscar + "&criterio=" + criterio;
       axios
         .get(url)
         .then(function(response) {
@@ -346,6 +349,29 @@ export default {
       // enviar la peticion para visualizar la data de esta pagina
       me.listar(page, buscar, criterio);
     },
+    selectCategoria(search,loading){
+      let me=this;
+      loading(true);
+      var url = "/categoria/selectCategoria?filtro=" + search;
+      axios
+        .get(url)
+        .then(function(response) {
+          let respuesta = response.data;
+          q: search;
+          me.arrayCategoria = respuesta.categorias;
+          loading(false);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    getDatosCategoria(val1)
+    {
+      let me=this;
+      me.loading=true;
+      me.id=val1.id;
+      me.idCategoria=val.idCategoria;
+    },
     registrar() {
       if (this.validar()) {
         return;
@@ -353,13 +379,12 @@ export default {
       let me = this;
 
       axios
-        .post("/cliente/registrar", {
+        .post("/producto/registrar", {
+          idCategoria: this.idCategoria,
           nombre: this.nombre,
-          apellido: this.apellido,
-          telefono: this.telefono,
-          ci: this.ci,
-          sexo: this.sexo,
-          direccion: this.direccion
+          descripcion: this.descripcion,
+          imagen: this.imagen,
+          stock: this.stock
         })
         .then(function(response) {
           me.cerrarModal();
@@ -374,13 +399,13 @@ export default {
         return;
       }
       let me = this;
-      axios.put("/cliente/actualizar", {
+      axios
+        .put("/producto/actualizar", {
+          idCategoria: this.idCategoria,
           nombre: this.nombre,
-          apellido: this.apellido,
-          telefono: this.telefono,
-          ci: this.ci,
-          direccion: this.direccion,
-          sexo: this.sexo,
+          descripcion: this.descripcion,
+          imagen: this.imagen,
+          stock: this.stock,
           id: this.id
         })
         .then(function(response) {
@@ -403,7 +428,7 @@ export default {
 
       swalWithBootstrapButtons
         .fire({
-          title: "Estas Seguro de Desactivar al Cliente?",
+          title: "Estas Seguro de Desactivar el Producto?",
           text: "Si Desactiva no estara en la Lista!",
           type: "warning",
           showCancelButton: true,
@@ -415,27 +440,23 @@ export default {
           if (result.value) {
             let me = this;
 
-                axios
-                  .put("/cliente/desactivar", {
-                    id: id
-                  })
-                  .then(function(response) {
-                    me.listar(1, "", "nombre");
-            Swal.fire({
-              position: "center",
-              type: "success",
-              title: "El Cliente ha sido Desactivado",
-              showConfirmButton: false,
-              timer: 1000
-            })
-            .catch(function(error) {
-                    console.log(error);
-                  });
-          } );
-          }
-          else if (
-            result.dismiss === Swal.DismissReason.cancel
-          ) {
+            axios
+              .put("/producto/desactivar", {
+                id: id
+              })
+              .then(function(response) {
+                me.listar(1, "", "nombre");
+                Swal.fire({
+                  position: "center",
+                  type: "success",
+                  title: "El Producto ha sido Desactivado",
+                  showConfirmButton: false,
+                  timer: 1000
+                }).catch(function(error) {
+                  console.log(error);
+                });
+              });
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
             Swal.fire({
               position: "center",
               type: "error",
@@ -457,7 +478,7 @@ export default {
 
       swalWithBootstrapButtons
         .fire({
-          title: "Estas Seguro de Activar al Cliente?",
+          title: "Estas Seguro de Activar al Producto?",
           text: "Si Activa Estara en la Lista!",
           type: "warning",
           showCancelButton: true,
@@ -469,27 +490,23 @@ export default {
           if (result.value) {
             let me = this;
 
-                axios
-                  .put("/cliente/activar", {
-                    id: id
-                  })
-                  .then(function(response) {
-                    me.listar(1, "", "nombre");
-            Swal.fire({
-              position: "center",
-              type: "success",
-              title: "El Cliente ha sido Activado",
-              showConfirmButton: false,
-              timer: 1000
-            })
-            .catch(function(error) {
-                    console.log(error);
-                  });
-          } );
-          }
-          else if (
-            result.dismiss === Swal.DismissReason.cancel
-          ) {
+            axios
+              .put("/producto/activar", {
+                id: id
+              })
+              .then(function(response) {
+                me.listar(1, "", "nombre");
+                Swal.fire({
+                  position: "center",
+                  type: "success",
+                  title: "El Producto ha sido Activado",
+                  showConfirmButton: false,
+                  timer: 1000
+                }).catch(function(error) {
+                  console.log(error);
+                });
+              });
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
             Swal.fire({
               position: "center",
               type: "error",
@@ -499,55 +516,54 @@ export default {
             });
           }
         });
-
     },
     validar() {
       this.errorMostrar = 0;
       this.errorMostrarMsj = [];
 
       if (!this.nombre)
-        this.errorMostrarMsj.push("Ingrese el Nombre del Cliente");
-      if (!this.apellido)
-        this.errorMostrarMsj.push("Ingrese el Apellido del Cliente");
+        this.errorMostrarMsj.push("Ingrese el Nombre del Producto");
+      if (!this.descripcion)
+        this.errorMostrarMsj.push("Ingrese la Descripcion del Producto");
       if (this.errorMostrarMsj.length) this.errorMostrar = 1;
       return this.errorMostrar;
     },
     cerrarModal() {
       (this.modal = 0), (this.tituloModal = "");
       this.nombre = "";
-      this.apellido = "";
-      this.telefono = "";
-      this.ci = "";
-      this.sexo = "";
-      this.direccion = "";
+      this.idCategoria = 0;
+      this.categoria = "";
+      this.descripcion = "";
+      this.imagen = "";
+      this.stock = "";
     },
     abrirModal(modelo, accion, data = []) {
       switch (modelo) {
-        case "cliente": {
+        case "producto": {
           switch (accion) {
             case "registrar": {
               this.modal = 1;
-              this.tituloModal = "Registrar Cliente";
+              this.tituloModal = "Registrar Producto";
               this.nombre = "";
-              this.apellido = "";
-              this.telefono = "";
-              this.ci = "";
-              this.sexo = "";
-              this.direccion = "";
+              this.idCategoria = 0;
+              this.categoria = "";
+              this.descripcion = "";
+              this.imagen = "";
+              this.stock = "";
               this.tipoAccion = 1;
               break;
             }
             case "actualizar": {
               // console.log(data);
               this.modal = 1;
-              this.tituloModal = "Actualizar Cliente";
+              this.tituloModal = "Actualizar Producto";
               this.tipoAccion = 2;
               this.id = data["id"];
               this.nombre = data["nombre"];
-              this.apellido = data["apellido"];
-              this.telefono = data["telefono"];
-              this.ci = data["ci"];
-              this.sexo = data["sexo"];
+              this.descripcion = data["descripcion"];
+              this.imagen = data["imagen"];
+              this.stock = data["stock"];
+              this.idCategoria = data["idCategoria"];
               this.direccion = data["direccion"];
               break;
             }
