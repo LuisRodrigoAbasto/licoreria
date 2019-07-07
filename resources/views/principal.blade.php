@@ -19,6 +19,7 @@
     <title>CoreUI Free Bootstrap Admin Template</title>
     <!-- Icons-->
     <link href="css/plantilla.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Global site tag (gtag.js) - Google Analytics-->
     {{-- <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
     <script>

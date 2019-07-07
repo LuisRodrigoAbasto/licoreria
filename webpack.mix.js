@@ -21,8 +21,8 @@ mix.styles([
     'resources/plantilla/css/pace.min.css'
    ], 'public/css/plantilla.css')
    .scripts([
-     'resources/plantilla/js/jquery.min.js',
-     'resources/plantilla/js/popper.min.js',
+    //  'resources/plantilla/js/jquery.min.js',
+    //  'resources/plantilla/js/popper.min.js',
     //  'resources/plantilla/js/bootstrap.min.js',
      'resources/plantilla/js/pace.min.js',
      'resources/plantilla/js/perfect-scrollbar.min.js',
@@ -30,6 +30,7 @@ mix.styles([
      'resources/plantilla/js/Chart.min.js',
      'resources/plantilla/js/custom-tooltips.min.js',
      'resources/plantilla/js/main.js',
+    //  'resources/plantilla/js/template.js',
      'resources/plantilla/js/sweetalert2.all.min.js'
    ], 'public/js/plantilla.js')
    .js(['resources/js/app.js'],'public/js/app.js');

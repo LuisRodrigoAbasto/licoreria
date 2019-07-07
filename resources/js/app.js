@@ -30,9 +30,10 @@ window.Vue = require('vue');
 Vue.component('cliente', require('./components/Cliente.vue').default);
 Vue.component('categoria', require('./components/Categoria.vue').default);
 Vue.component('producto', require('./components/Producto.vue').default);
+Vue.component('venta', require('./components/Venta.vue').default);
 const app = new Vue({
     el: '#app',
     data :{
-        menu : 0
+        menu : 1
     }
 });

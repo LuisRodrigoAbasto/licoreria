@@ -11,13 +11,13 @@ class DetallePedido extends Model
     
     protected $fillable = ['idPedido','idProducto','cantidad','precio','estado'];
     
-    public function pedido()
-    {
-        return $this->belongsTo('App\Pedido');
-    }
+    // public function pedido()
+    // {
+    //     return $this->belongsTo('App\Pedido');
+    // }
 
-    public function producto()
-    {
-        return $this->belongsTo('App\Producto');
-    }
+    // public function producto()
+    // {
+    //     return $this->belongsTo('App\Producto');
+    // }
 }

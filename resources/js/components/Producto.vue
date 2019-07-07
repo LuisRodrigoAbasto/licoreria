@@ -55,16 +55,19 @@
                 <button type="submit" @click="listar(1,buscar,criterio)" class="btn btn-primary">
                   <i class="fa fa-search"></i> Buscar
                 </button>
-                
+                <div>
+                </div>
               </div>
             </div>
           </div>
+           
           <table class="table table-responsive-sm table-bordered table-striped table-sm">
             <thead>
               <tr>
                 <th>ID</th>
                 <th>Categoria</th>
                 <th>Nombre</th>
+                <th>Precio</th>
                 <th>Descripcion</th>
                 <th>Imagen</th>
                 <th>Stock</th>
@@ -77,6 +80,7 @@
                 <td>{{ data.id }}</td>
                 <td>{{ data.categoria }}</td>
                 <td>{{ data.nombre }}</td>
+                <td>{{ data.precio }}</td>
                 <td>{{ data.descripcion }}</td>
                 <td>{{ data.imagen }}</td>
                 <td>{{ data.stock }}</td>
@@ -220,16 +224,29 @@
                   />
                 </div>
               </div>
+               <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Precio</label>
+                <div class="col-md-9">
+                  <input
+                    type="number"
+                    min="0"
+                    v-model="precio"
+                    class="form-control"
+                    placeholder="Stock............"
+                  />
+                </div>
+              </div>
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input">Categoria</label>
                 <div class="col-md-9">
-                  <v-select
-                    :on-search="selectCategoria"
+                    <v-select
+                    placeholder="Buscar Categoria..."
+                    @search="selectCategoria"
                     label="nombre"
                     :options="arrayCategoria"
-                    placeholder="Buscar Categoria..."
-                    :onChange="getDatosCategoria"
-                  ></v-select>
+                    v-model="selected"
+                    @input="getDatosCategoria"
+                  />
                 </div>
               </div>
 
@@ -268,7 +285,12 @@
   </main>
 </template>
 <script>
-import VSelect from "vue-select";
+import Vue from 'vue'
+import vSelect from 'vue-select'
+
+import 'vue-select/dist/vue-select.css';
+
+// Vue.component('v-select', vSelect)
 export default {
   data() {
     return {
@@ -279,6 +301,7 @@ export default {
       stock: "",
       idCategoria: 0,
       categoria: "",
+      precio:0,
       arrayData: [],
       arrayCategoria: [],
       modal: 0,
@@ -294,13 +317,11 @@ export default {
         from: 0,
         to: 0
       },
+      selected:null,
       offset: 3,
       criterio: "nombre",
       buscar: ""
     };
-  },
-  components: {
-    VSelect
   },
   computed: {
     isActived: function() {
@@ -370,8 +391,7 @@ export default {
     {
       let me=this;
       me.loading=true;
-      me.id=val1.id;
-      me.idCategoria=val.idCategoria;
+      me.idCategoria=val1.id;
     },
     registrar() {
       if (this.validar()) {
@@ -385,7 +405,8 @@ export default {
           nombre: this.nombre,
           descripcion: this.descripcion,
           imagen: this.imagen,
-          stock: this.stock
+          stock: this.stock,
+          precio:this.precio
         })
         .then(function(response) {
           me.cerrarModal();
@@ -405,6 +426,7 @@ export default {
           idCategoria: this.idCategoria,
           nombre: this.nombre,
           descripcion: this.descripcion,
+          precio:this.precio,
           imagen: this.imagen,
           stock: this.stock,
           id: this.id
@@ -535,8 +557,10 @@ export default {
       this.idCategoria = 0;
       this.categoria = "";
       this.descripcion = "";
+      this.precio=0;
       this.imagen = "";
       this.stock = "";
+      this.selected=null;
     },
     abrirModal(modelo, accion, data = []) {
       switch (modelo) {
@@ -550,8 +574,11 @@ export default {
               this.categoria = "";
               this.descripcion = "";
               this.imagen = "";
+              this.precio=0;
               this.stock = "";
+              this.selected=null;
               this.tipoAccion = 1;
+              
               break;
             }
             case "actualizar": {
@@ -565,7 +592,10 @@ export default {
               this.imagen = data["imagen"];
               this.stock = data["stock"];
               this.idCategoria = data["idCategoria"];
+              this.precio=data["precio"];
+              this.categoria = data["categoria"];
               this.direccion = data["direccion"];
+               this.selected={id:this.idCategoria,nombre:this.categoria};
               break;
             }
           }
@@ -577,6 +607,7 @@ export default {
     this.listar(1, this.buscar, this.criterio);
   }
 };
+Vue.component('v-select', vSelect)
 </script>
 <style>
 .modal-content {

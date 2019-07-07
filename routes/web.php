@@ -27,9 +27,18 @@ Route::post('/cliente/registrar', 'ClienteController@store');
 Route::put('/cliente/actualizar', 'ClienteController@update');
 Route::put('/cliente/desactivar', 'ClienteController@desactivar');
 Route::put('/cliente/activar', 'ClienteController@activar');
+Route::get('/cliente/selectCliente', 'ClienteController@selectCliente');
 
 Route::get('/producto', 'ProductoController@index');
 Route::post('/producto/registrar', 'ProductoController@store');
 Route::put('/producto/actualizar', 'ProductoController@update');
 Route::put('/producto/desactivar', 'ProductoController@desactivar');
 Route::put('/producto/activar', 'ProductoController@activar');
+Route::get('/producto/selectProducto', 'ProductoController@selectProducto');
+
+Route::get('/venta', 'VentaController@index');
+Route::post('/venta/registrar', 'VentaController@store');
+Route::put('/venta/actualizar', 'VentaController@update');
+Route::put('/venta/desactivar', 'VentaController@desactivar');
+Route::put('/venta/activar', 'VentaController@activar');
+

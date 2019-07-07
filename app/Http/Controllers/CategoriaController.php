@@ -25,10 +25,11 @@ class CategoriaController extends Controller
         ];
     }
     public function selectCategoria(Request $request){
-        if (!$request->ajax()) return redirect('/');
+        // if (!$request->ajax()) return redirect('/');
         $buscar=$request->filtro;
         $categorias = Categoria::where('nombre','like','%'. $buscar . '%')->where('estado','=','1')
-        ->select('id','nombre')->orderBy('nombre', 'asc')->get();
+        ->orderBy('nombre', 'asc')
+        ->get();
         return ['categorias' => $categorias];
     }
     public function store(Request $request)

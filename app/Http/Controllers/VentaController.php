@@ -12,12 +12,15 @@ class VentaController extends Controller
 {
     public function index(Request $request)
     {
-        if(!$request->ajax()) return redirect('/');
+        // if(!$request->ajax()) return redirect('/');
 
         $buscar = $request->buscar;
-        $criterio = $request->criterio;
 
-        $ventas= Venta::where('estado','=','1')->orderBy('ventas.id','desc')->paginate(10);
+        $ventas= Venta::join('clientes','ventas.idCliente','=','clientes.id')
+        ->select('ventas.id','ventas.fecha','ventas.idCliente','ventas.monto','ventas.descripcion','ventas.estado',DB::raw("concat(clientes.nombre,' ',clientes.apellido) as cliente"))
+        ->where('ventas.estado','=','1')
+        ->where('clientes.nombre','like','%'.$buscar.'%')
+        ->orderBy('ventas.id','desc')->paginate(10);
 
         return [
             'pagination' => [
@@ -30,7 +33,6 @@ class VentaController extends Controller
             ],
             'ventas' => $ventas
         ];
-        
     }
 
     
@@ -38,12 +40,14 @@ class VentaController extends Controller
     {   
         if (!$request->ajax()) return redirect('/');
 
-        DB::beginTransaction();
-        try{            
+       
+        try{       
+            DB::beginTransaction();     
             $mytime= Carbon::now('America/La_Paz');
             $venta = new Venta();
             $venta->idCliente = $request->idCliente;
-            $venta->idUsuario =$request->idUsuario;
+            $venta->idUsuario ='1';
+            // $venta->idUsuario =$request->idUsuario;
             $venta->fecha = $mytime->toDateTimeString();
             $venta->monto = $request->monto;
             $venta->descripcion = $request->descripcion;
@@ -55,12 +59,12 @@ class VentaController extends Controller
            
             foreach($detalles as $ep=>$det)
             {
-                $detalle = new DetalleVenta();
-                $detalle->idVenta= $venta->id;
-                $detalle->idProducto= $det['idProducto'];
-                $detalle->cantidad = $det['cantidad'];   
-                $detalle->precio = $det['precioTotal']; 
-                $detalle->save();
+                $detalle_venta = new DetalleVenta();
+                $detalle_venta->idVenta= $venta->id;
+                $detalle_venta->idProducto= $det['id'];
+                $detalle_venta->cantidad = $det['cantidad'];   
+                $detalle_venta->precio = $det['precio']*$detalle_venta->cantidad; 
+                $detalle_venta->save();
             } 
 
             DB::commit();

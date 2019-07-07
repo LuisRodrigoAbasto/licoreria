@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Cliente;
+use DB;
 
 class ClienteController extends Controller
 {
@@ -30,7 +31,7 @@ class ClienteController extends Controller
 
     public function selectCliente(Request $request)
     {
-        if(!$request->ajax()) return redirect('/');
+        // if(!$request->ajax()) return redirect('/');
         $filtro = $request->filtro;
         $clientes = Cliente::where('estado','=','1')
         ->where('nombre','like','%'.$filtro.'%')

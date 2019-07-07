@@ -13,7 +13,9 @@ class ProductoController extends Controller
 
         $buscar = $request->buscar;
         $criterio = $request->criterio;
-        $productos = Producto::where('estado','=','1')->where($criterio, 'like','%'.$buscar.'%')->orderBy('id','desc')->paginate(10);
+        $productos = Producto::join('categorias','productos.idCategoria','=','categorias.id')
+        ->select('productos.id','idCategoria','categorias.nombre as categoria','productos.nombre','descripcion','productos.precio','imagen','stock','productos.estado')
+        ->where('productos.estado','=','1')->where('productos.'.$criterio, 'like','%'.$buscar.'%')->orderBy('productos.id','desc')->paginate(10);
         return [
             'pagination' => [
                 'total'        => $productos->total(),
@@ -39,11 +41,14 @@ class ProductoController extends Controller
 
     public function selectProducto(Request $request)
     {
-        if(!$request->ajax()) return redirect('/');
+        // if(!$request->ajax()) return redirect('/');
         $filtro = $request->filtro;
-        $productos = Producto::where('estado','=','1')
-        ->orWhere('nombre','like','%'.$filtro.'%')
-        ->orderBy('nombre','asc')
+        $criterio = $request->criterio;
+        $productos = Producto::join('categorias','productos.idCategoria','=','categorias.id')
+        ->select('productos.id','idCategoria','categorias.nombre as categoria','productos.nombre as producto','descripcion','imagen','productos.precio','stock','productos.estado')
+        ->where('productos.estado','=','1')
+        ->Where($criterio.'.nombre','like','%'.$filtro.'%')
+        ->orderBy('productos.nombre','asc')
         ->get();
         return ['productos'=>$productos];
         
@@ -54,10 +59,11 @@ class ProductoController extends Controller
     {
         if(!$request->ajax()) return redirect('/');
         $productos = new Producto();
-        $productos->idCategori= $request->idCategoria;
+        $productos->idCategoria= $request->idCategoria;
         $productos->nombre = $request->nombre;
         $productos->descripcion = $request->descripcion;
         $productos->imagen = $request->imagen;
+        $productos->precio=$request->precio;
         $productos->stock = $request->stock;
         $productos->estado = '1';
         $productos->save();
@@ -67,10 +73,11 @@ class ProductoController extends Controller
     {
         if(!$request->ajax()) return redirect('/');
         $productos = Producto::findOrFail($request->id);
-        $productos->idCategori= $request->idCategoria;
+        $productos->idCategoria= $request->idCategoria;
         $productos->nombre = $request->nombre;
         $productos->descripcion = $request->descripcion;
         $productos->imagen = $request->imagen;
+        $productos->precio=$request->precio;
         $productos->stock = $request->stock;
         $productos->estado = '1';
         $productos->save();

@@ -20,6 +20,7 @@ class CreateProductosTable extends Migration
             $table->string('descripcion',300);
             $table->string('imagen',300);
             $table->integer('stock');
+            $table->decimal('precio',20,2);
             $table->boolean('estado')->default(1);
             $table->foreign('idCategoria')->references('id')->on('categorias');
             $table->timestamps();
