@@ -40,13 +40,12 @@ class VentaController extends Controller
     {   
         if (!$request->ajax()) return redirect('/');
 
-       
-        try{       
-            DB::beginTransaction();     
+        DB::beginTransaction();    
+        try{        
             $mytime= Carbon::now('America/La_Paz');
             $venta = new Venta();
             $venta->idCliente = $request->idCliente;
-            $venta->idUsuario ='1';
+            $venta->idUsuario =\Auth::user()->id;
             // $venta->idUsuario =$request->idUsuario;
             $venta->fecha = $mytime->toDateTimeString();
             $venta->monto = $request->monto;

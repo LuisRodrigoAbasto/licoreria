@@ -29,6 +29,15 @@ class CategoriaController extends Controller
         $buscar=$request->filtro;
         $categorias = Categoria::where('nombre','like','%'. $buscar . '%')->where('estado','=','1')
         ->orderBy('nombre', 'asc')
+        ->take(5)
+        ->get();
+        return ['categorias' => $categorias];
+    }
+    public function listarCategoria(Request $request){
+        // if (!$request->ajax()) return redirect('/');
+        $buscar=$request->filtro;
+        $categorias = Categoria::where('estado','=','1')
+        ->orderBy('nombre', 'asc')
         ->get();
         return ['categorias' => $categorias];
     }

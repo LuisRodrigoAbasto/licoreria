@@ -73,7 +73,8 @@
         </li>
         <li class="nav-item d-md-down-none">
           <a class="nav-link" href="#">
-            <i class="icon-location-pin"></i>
+            {{-- <i class="icon-location-pin"></i> --}}
+            {{ Auth::user()->name }} <span class="caret"></span>
           </a>
         </li>
         <li class="nav-item dropdown">
@@ -118,8 +119,12 @@
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="#">
               <i class="fa fa-shield"></i> Lock Account</a>
-            <a class="dropdown-item" href="#">
+            <a class="dropdown-item"  onclick="event.preventDefault();
+            document.getElementById('logout-form').submit();">
               <i class="fa fa-lock"></i> Logout</a>
+              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
           </div>
         </li>
       </ul>

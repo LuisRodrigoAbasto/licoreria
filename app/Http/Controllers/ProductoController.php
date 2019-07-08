@@ -57,29 +57,65 @@ class ProductoController extends Controller
 
     public function store(Request $request)
     {
+        \Log::info($request->all());
         if(!$request->ajax()) return redirect('/');
         $productos = new Producto();
         $productos->idCategoria= $request->idCategoria;
         $productos->nombre = $request->nombre;
         $productos->descripcion = $request->descripcion;
-        $productos->imagen = $request->imagen;
+        // $productos->imagen = $request->imagen;
         $productos->precio=$request->precio;
         $productos->stock = $request->stock;
         $productos->estado = '1';
+        if($request->imagen==null){//si no tiene imagen entonces se le asigna una imagen por defecto
+            $productos->imagen ='defecto.png';
+            }else{
+                    /*guardando la super imagen */
+                    $explode=explode(',',$request->imagen);
+                    $decoded=\base64_decode($explode[1]);
+                    if(str_contains($explode[0],'jpeg')){
+                        $extension='jpg';
+                    }else{
+                        $extension='png';
+                    }
+                    $fileName = \str_random().'.'.$extension;
+                    $path= 'imagenes/productos'.'/'.$fileName;
+                    \file_put_contents($path,$decoded);
+                    /*terminando de guardar la superImagen */
+                    $productos->imagen=$fileName;   
+            }
         $productos->save();
     }
 
     public function update(Request $request)
     {
+        \Log::info($request->all());
         if(!$request->ajax()) return redirect('/');
         $productos = Producto::findOrFail($request->id);
         $productos->idCategoria= $request->idCategoria;
         $productos->nombre = $request->nombre;
         $productos->descripcion = $request->descripcion;
-        $productos->imagen = $request->imagen;
+        // $productos->imagen = $request->imagen;
         $productos->precio=$request->precio;
         $productos->stock = $request->stock;
         $productos->estado = '1';
+        if($request->imagen==null){//si no tiene imagen entonces se le asigna una imagen por defecto
+            $productos->imagen ='defecto.png';
+            }else{
+                    /*guardando la super imagen */
+                    $explode=explode(',',$request->imagen);
+                    $decoded=\base64_decode($explode[1]);
+                    if(str_contains($explode[0],'jpeg')){
+                        $extension='jpg';
+                    }else{
+                        $extension='png';
+                    }
+                    $fileName = \str_random().'.'.$extension;
+                    $path= 'imagenes/productos'.'/'.$fileName;
+                    \file_put_contents($path,$decoded);
+                    /*terminando de guardar la superImagen */
+                    $productos->imagen=$fileName;   
+            }
         $productos->save();
     }
     

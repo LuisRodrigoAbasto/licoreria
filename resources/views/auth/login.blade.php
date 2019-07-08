@@ -5,8 +5,9 @@
     <div class="col-md-8">
       <div class="card-group">
         <div class="card p-4">
-          <form class="form-hozintal was-validated" method="POST" action="{{ route('login') }}">
-            {{ csrf_field() }}
+          <form method="POST" action="{{ route('login') }}">
+            @csrf
+
           <div class="card-body">
             <h1>Login</h1>
             <p class="text-muted">Sign In to your account</p>
@@ -16,8 +17,13 @@
                   <i class="icon-user"></i>
                 </span>
               </div>
-              <input class="form-control" type="text" name="email" id="email" placeholder="Username">
-              { !!errors->first('email','<span class="invalid-feedback">:message</span>')!! }
+              <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="Username">
+             
+              @error('email')
+              <span class="invalid-feedback" role="alert">
+                  <strong>{{ $message }}</strong>
+              </span>
+          @enderror
             </div>
             <div class="input-group mb-4 {{ $errors->has('password' ? 'is-invalid' :'') }}">
               <div class="input-group-prepend">
@@ -25,12 +31,16 @@
                   <i class="icon-lock"></i>
                 </span>
               </div>
-              <input class="form-control" type="password" name="password" id="password" placeholder="Password">
-              { !!errors->first('password','<span class="invalid-feedback">:message</span>')!! }
+              <input class="form-control" type="password" lass="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="Password">
+              @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
             </div>
             <div class="row">
               <div class="col-6">
-                <button class="btn btn-primary px-4" type="button">Login</button>
+                <button class="btn btn-primary px-4" type="submit">Login</button>
               </div>
               <div class="col-6 text-right">
                 <button class="btn btn-link px-0" type="button">Forgot password?</button>

@@ -55,12 +55,11 @@
                 <button type="submit" @click="listar(1,buscar,criterio)" class="btn btn-primary">
                   <i class="fa fa-search"></i> Buscar
                 </button>
-                <div>
-                </div>
+                <div></div>
               </div>
             </div>
           </div>
-           
+
           <table class="table table-responsive-sm table-bordered table-striped table-sm">
             <thead>
               <tr>
@@ -201,17 +200,7 @@
                   />
                 </div>
               </div>
-              <div class="form-group row">
-                <label class="col-md-3 form-control-label" for="text-input">Imagen</label>
-                <div class="col-md-9">
-                  <input
-                    type="text"
-                    v-model="imagen"
-                    class="form-control"
-                    placeholder="Imagen.............."
-                  />
-                </div>
-              </div>
+
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input">Stock</label>
                 <div class="col-md-9">
@@ -224,7 +213,7 @@
                   />
                 </div>
               </div>
-               <div class="form-group row">
+              <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input">Precio</label>
                 <div class="col-md-9">
                   <input
@@ -236,10 +225,25 @@
                   />
                 </div>
               </div>
+
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Imagen</label>
+                <div class="col-md-9 custom-file">
+                  <!-- <input
+                    type="text"
+                    v-model="imagen"
+                    class="form-control"
+                    placeholder="Imagen.............."
+                  />-->
+                  <input type="file" class="custom-file-input" id="customFileLangHTML" @change="imageChanged" />
+                   <label class="custom-file-label" for="customFileLang">Seleccionar Archivo</label>
+                </div>
+              </div>
+
               <div class="form-group row">
                 <label class="col-md-3 form-control-label" for="text-input">Categoria</label>
                 <div class="col-md-9">
-                    <v-select
+                  <v-select
                     placeholder="Buscar Categoria..."
                     @search="selectCategoria"
                     label="nombre"
@@ -285,10 +289,10 @@
   </main>
 </template>
 <script>
-import Vue from 'vue'
-import vSelect from 'vue-select'
+import Vue from "vue";
+import vSelect from "vue-select";
 
-import 'vue-select/dist/vue-select.css';
+import "vue-select/dist/vue-select.css";
 
 // Vue.component('v-select', vSelect)
 export default {
@@ -301,7 +305,7 @@ export default {
       stock: "",
       idCategoria: 0,
       categoria: "",
-      precio:0,
+      precio: 0,
       arrayData: [],
       arrayCategoria: [],
       modal: 0,
@@ -317,7 +321,7 @@ export default {
         from: 0,
         to: 0
       },
-      selected:null,
+      selected: null,
       offset: 3,
       criterio: "nombre",
       buscar: ""
@@ -352,7 +356,12 @@ export default {
     listar(page, buscar, criterio) {
       let me = this;
       var url =
-        "/producto?page=" + page + "&buscar=" + buscar + "&criterio=" + criterio;
+        "/producto?page=" +
+        page +
+        "&buscar=" +
+        buscar +
+        "&criterio=" +
+        criterio;
       axios
         .get(url)
         .then(function(response) {
@@ -371,10 +380,10 @@ export default {
       // enviar la peticion para visualizar la data de esta pagina
       me.listar(page, buscar, criterio);
     },
-    selectCategoria(search,loading){
-      let me=this;
+    selectCategoria(search, loading) {
+      let me = this;
       loading(true);
-      var url = "/categoria/selectCategoria?filtro="+ search;
+      var url = "/categoria/selectCategoria?filtro=" + search;
       axios
         .get(url)
         .then(function(response) {
@@ -387,11 +396,19 @@ export default {
           console.log(error);
         });
     },
-    getDatosCategoria(val1)
-    {
-      let me=this;
-      me.loading=true;
-      me.idCategoria=val1.id;
+    getDatosCategoria(val1) {
+      let me = this;
+      me.loading = true;
+      me.idCategoria = val1.id;
+    },
+    imageChanged(e) {
+      console.log(e.target.files[0]);
+      var fileReader = new FileReader();
+      fileReader.readAsDataURL(e.target.files[0]);
+      fileReader.onload = e => {
+        this.imagen = e.target.result;
+      };
+      console.log(this.imagen);
     },
     registrar() {
       if (this.validar()) {
@@ -406,7 +423,7 @@ export default {
           descripcion: this.descripcion,
           imagen: this.imagen,
           stock: this.stock,
-          precio:this.precio
+          precio: this.precio
         })
         .then(function(response) {
           me.cerrarModal();
@@ -426,7 +443,7 @@ export default {
           idCategoria: this.idCategoria,
           nombre: this.nombre,
           descripcion: this.descripcion,
-          precio:this.precio,
+          precio: this.precio,
           imagen: this.imagen,
           stock: this.stock,
           id: this.id
@@ -557,10 +574,10 @@ export default {
       this.idCategoria = 0;
       this.categoria = "";
       this.descripcion = "";
-      this.precio=0;
+      this.precio = 0;
       this.imagen = "";
       this.stock = "";
-      this.selected=null;
+      this.selected = null;
     },
     abrirModal(modelo, accion, data = []) {
       switch (modelo) {
@@ -574,11 +591,11 @@ export default {
               this.categoria = "";
               this.descripcion = "";
               this.imagen = "";
-              this.precio=0;
+              this.precio = 0;
               this.stock = "";
-              this.selected=null;
+              this.selected = null;
               this.tipoAccion = 1;
-              
+
               break;
             }
             case "actualizar": {
@@ -592,10 +609,10 @@ export default {
               this.imagen = data["imagen"];
               this.stock = data["stock"];
               this.idCategoria = data["idCategoria"];
-              this.precio=data["precio"];
+              this.precio = data["precio"];
               this.categoria = data["categoria"];
               this.direccion = data["direccion"];
-               this.selected={id:this.idCategoria,nombre:this.categoria};
+              this.selected = { id: this.idCategoria, nombre: this.categoria };
               break;
             }
           }
@@ -607,7 +624,7 @@ export default {
     this.listar(1, this.buscar, this.criterio);
   }
 };
-Vue.component('v-select', vSelect)
+Vue.component("v-select", vSelect);
 </script>
 <style>
 .modal-content {

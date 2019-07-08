@@ -2,7 +2,7 @@
         <nav class="sidebar-nav">
           <ul class="nav">
             <li class="nav-item" @click="menu=0">
-              <a class="nav-link" href="#">
+              <a class="nav-link" ref="#">
                 <i class="nav-icon icon-speedometer"></i> Dashboard
                 <span class="badge badge-primary">NEW</span>
               </a>
@@ -10,40 +10,40 @@
 
             <li class="nav-title">Mantenimiento</li>
             <li class="nav-item nav-dropdown">
-              <a class="nav-link nav-dropdown-toggle" href="#">
+              <a class="nav-link nav-dropdown-toggle">
                 <i class="nav-icon icon-puzzle"></i> Productos</a>
               <ul class="nav-dropdown-items">
                 <li @click="menu=1" class="nav-item">
-                  <a class="nav-link" href="#">
+                  <a class="nav-link" ref="#" >
                     <i class="nav-icon icon-puzzle"></i>Producto</a>
                 </li>
                 <li class="nav-item" @click="menu=2">
-                  <a class="nav-link" href="#">
+                  <a class="nav-link" ref="#" >
                     <i class="nav-icon icon-pencil"></i> Categoria</a>
                 </li>
               </ul>
             </li>
             <li class="nav-item nav-dropdown">
-              <a class="nav-link nav-dropdown-toggle" href="#">
+              <a class="nav-link nav-dropdown-toggle" >
                 <i class="nav-icon icon-cursor"></i> Ventas</a>
               <ul class="nav-dropdown-items">
                 <li class="nav-item" @click="menu=3">
-                  <a class="nav-link" href="#">
+                  <a class="nav-link" ref="#"  >
                     <i class="nav-icon icon-cursor"></i> Venta</a>
                 </li>
                 <li class="nav-item" @click="menu=4">
-                  <a class="nav-link" href="#">
+                  <a class="nav-link" ref="#"  >
                     <i class="nav-icon icon-cursor"></i> Cliente</a>
                 </li>
                
               </ul>
             </li>
             <li class="nav-item" @click="menu=6">
-              <a class="nav-link" href="#">
+              <a class="nav-link"  ref="#" >
                 <i class="nav-icon icon-pie-chart"></i> Charts</a>
             </li>
             <li class="nav-item nav-dropdown">
-              <a class="nav-link nav-dropdown-toggle" href="#">
+              <a class="nav-link nav-dropdown-toggle" >
                 <i class="nav-icon icon-star"></i> Icons</a>
               <ul class="nav-dropdown-items">
                 <li class="nav-item">
@@ -53,23 +53,23 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="icons/flags.html">
+                  <a class="nav-link" href="#">
                     <i class="nav-icon icon-star"></i> Flags</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="icons/font-awesome.html">
+                  <a class="nav-link" href="#">
                     <i class="nav-icon icon-star"></i> Font Awesome
                     <span class="badge badge-secondary">4.7</span>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="icons/simple-line-icons.html">
+                  <a class="nav-link" href="#">
                     <i class="nav-icon icon-star"></i> Simple Line Icons</a>
                 </li>
               </ul>
             </li>
             <li class="nav-item nav-dropdown">
-              <a class="nav-link nav-dropdown-toggle" href="#">
+              <a class="nav-link nav-dropdown-toggle" >
                 <i class="nav-icon icon-bell"></i> Notifications</a>
               <ul class="nav-dropdown-items">
                 <li class="nav-item">
@@ -95,7 +95,7 @@
             <li class="divider"></li>
             <li class="nav-title">Extras</li>
             <li class="nav-item nav-dropdown">
-              <a class="nav-link nav-dropdown-toggle" href="#">
+              <a class="nav-link nav-dropdown-toggle" >
                 <i class="nav-icon icon-star"></i> Pages</a>
               <ul class="nav-dropdown-items">
                 <li class="nav-item">
