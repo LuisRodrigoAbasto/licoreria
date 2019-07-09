@@ -26,6 +26,7 @@ mix.styles([
    'resources/plantilla/inicio/css/slick-theme.css',
    'resources/plantilla/inicio/css/nouislider.min.css',
    'resources/plantilla/inicio/css/font-awesome.min.css',
+   'resources/plantilla/inicio/css/simple-line-icons.css',
    'resources/plantilla/inicio/css/style.css'
   ],'public/css/inicio.css')
    .scripts(['resources/plantilla/registro/js/pace.min.js',

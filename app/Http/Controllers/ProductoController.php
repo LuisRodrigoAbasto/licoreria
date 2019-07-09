@@ -62,8 +62,8 @@ class ProductoController extends Controller
         $buscar = $request->buscar;
         $criterio = $request->criterio;
         $productos = Producto::join('categorias','productos.idCategoria','=','categorias.id')
-        ->select('productos.id','idCategoria','categorias.nombre as categoria','productos.nombre as producto','descripcion','productos.precio','imagen','stock','productos.estado')
-        ->where('productos.estado','=','1')->where($criterio.'.nombre', 'like','%'.$buscar.'%')->orderBy('productos.id','desc')->paginate(5);
+        ->select('productos.id','idCategoria','productos.estado as cantidad','categorias.nombre as categoria','productos.nombre as producto','descripcion','productos.precio','imagen','stock','productos.estado')
+        ->where('productos.estado','=','1')->where($criterio.'.nombre', 'like','%'.$buscar.'%')->orderBy('productos.id','desc')->paginate(9);
         return [
             'pagination' => [
                 'total'        => $productos->total(),

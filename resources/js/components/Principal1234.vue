@@ -6,7 +6,7 @@
 				<!-- row -->
 				<div class="row">
 					<!-- LOGO -->
-					<div class="col-md-3">
+					<div class="col-md-6">
 						<div class="header-logo">
 							<a href="" class="logo">
 								<img :src="'img/logo.png'" alt="">
@@ -16,33 +16,33 @@
 					<!-- /LOGO -->
 
 					<!-- SEARCH BAR -->
-					<div class="col-md-6">
+					<!-- <div class="col-md-6">
 						<div class="header-search">
 							<form>
 								<select class="input-select" v-model="criterio" >
 									<option value="productos">Todos</option>
 									<option value="productos">Productos</option>
-									<option value="categorias">Categorias</option>
+									<option value="categorias">Categorias</option>-->
 									<!-- <option v-for="dataCategoria in arrayCategoria" :key="dataCategoria.id" :value="dataCategoria.id" v-text="dataCategoria.nombre"></option> -->
-								</select>
+							<!--	</select>
 								<input class="input" placeholder="Search here" v-model="buscar" @keyup.enter="listar(1,buscar,criterio)">
 								<button class="search-btn" @click="listar(1,buscar,criterio)">Search</button>
 							</form>
 						</div>
-					</div>
+					</div> -->
 					<!-- /SEARCH BAR -->
 
 					<!-- ACCOUNT -->
-					<div class="col-md-3 clearfix">
+					<div class="col-md-6 clearfix">
 						<div class="header-ctn">
 							<!-- Wishlist -->
-							<!-- <div>
+							<div>
 								<a href="#">
 									<i class="fa fa-heart-o"></i>
 									<span >Your Wishlist</span>
 									<div class="qty">2</div>
 								</a>
-							</div> -->
+							</div>
 							<!-- /Wishlist -->
 
 							<!-- Cart -->
@@ -60,7 +60,7 @@
 											</div>
 											<div class="product-body">
 												<h3 class="product-name"><a href="#">{{ detalle.producto }}</a></h3>
-												<h4 class="product-price"><span class="qty">{{ detalle.cantidad }}</span>Bs. {{ detalle.precio*detalle.cantidad }}</h4>
+												<h4 class="product-price"><span class="qty">{{ detalle.cantidad }}</span>$ {{ detalle.precio*detalle.cantidad }}</h4>
 											</div>
 											<button class="delete"  @click="eliminarDetalle(index)"><i class="fa fa-close"></i></button>
 										</div>
@@ -77,12 +77,12 @@
 										</div> -->
 									</div>
 									<div class="cart-summary">
-										<small>{{ arrayDetalle.length }} productos marcados</small>
-										<h5>TOTAL: Bs. {{ totalPedido }}</h5>
+										<small>3 Item(s) selected</small>
+										<h5>SUBTOTAL: $2940.00</h5>
 									</div>
 									<div class="cart-btns">
-										<a href="#">Ver Carrito</a>
-										<a href="#">Continuar<i class="fa fa-arrow-circle-right"></i></a>
+										<a href="#">View Cart</a>
+										<a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
 									</div>
 								</div>
 							</div>
@@ -104,111 +104,130 @@
 			</div>
 			<!-- container -->
 		</div>
+		<!-- NAVIGATION -->
+				<!-- NAVIGATION -->
+		<nav id="navigation">
+			<!-- container -->
+			<div class="container">
+				<!-- responsive-nav -->
+				<div id="responsive-nav">
+					<!-- NAV -->
+					<ul class="main-nav nav navbar-nav">
+						<li class="active"><a href="#">Home</a></li>
+						<li><a href="#">Hot Deals</a></li>
+						<li><a href="#">Categories</a></li>
+						<li><a href="#">Laptops</a></li>
+						<li><a href="#">Smartphones</a></li>
+						<li><a href="#">Cameras</a></li>
+						<li><a href="#">Accessories</a></li>
+					</ul>
+					<!-- /NAV -->
+				</div>
+				<!-- /responsive-nav -->
+			</div>
+			<!-- /container -->
+		</nav>
+		<!-- /NAVIGATION -->
 
+		<!-- SECTION -->
+		
+		<!-- /SECTION -->
+
+		<!-- SECTION -->
 		<div class="section">
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
 				<div class="row">
-					<!-- ASIDE -->
-					
-					<!-- /ASIDE -->
-					<div class="col-md-1">
-
+					<template v-if="regargar">
+					<!-- section title -->
+					<div class="col-md-12">
+						<div class="section-title">
+							<h3 class="title">New Products</h3>
+							<div class="section-nav">
+								<ul class="section-tab-nav tab-nav">
+									<li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
+									<li><a data-toggle="tab" href="#tab1">Smartphones</a></li>
+									<li><a data-toggle="tab" href="#tab1">Cameras</a></li>
+									<li><a data-toggle="tab" href="#tab1">Accessories</a></li>
+								</ul>
+							</div>
+						</div>
 					</div>
-					<!-- STORE -->
-					<div id="store" class="col-md-10">
-						
-						<div class="row"  >
-							<!-- product -->
-							<div v-for="(data,index) in arrayData" :key="data.id">
-							<div class="col-md-4 col-xs-6" >
-								<div class="product">
-									<div class="product-img">
-										<img :src="'imagenes/productos/'+data.imagen" whith="200" height="200" alt="">
-										<div class="product-label">
-											<!-- <span class="sale">-30%</span> -->
-											<span class="new">NEW</span>
+					<!-- /section title -->
+					</template>
+					<!-- Products tab & slick -->
+					<div class="col-md-12">
+						<div class="row">
+							<div class="products-tabs">
+								<!-- tab -->
+								<div id="tab1" class="tab-pane active">
+									<div class="products-slick" data-nav="#slick-nav-1">
+										<!-- product -->
+										<div  class="product" v-for="data in arrayData" :key="data.id" >
+											<div class="product-img">
+												<img :src="'imagenes/productos/'+data.imagen"  alt="">
+												<div class="product-label">
+													<span class="sale">-30%</span>
+													<span class="new">NEW</span>
+												</div>
+											</div>
+											<div class="product-body">
+												<p class="product-category">{{ data.categoria }}</p>
+												<h3 class="product-name"><a href="#">{{ data.producto }}</a></h3>
+												<h4 class="product-price">${{ data.precio }} <del class="product-old-price">$00</del></h4>
+												<div class="product-rating">
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+												</div>
+												<div class="product-btns">
+													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+													<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+												</div>
+											</div>
+											<div class="add-to-cart" v-if="data.estado==1">
+												<button class="add-to-cart-btn" @click="agregarDetalleModal(data)"><i class="fa fa-shopping-cart"></i> carrito</button>
+											</div>
+											<div class="add-to-cart" v-else>
+												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> agregado</button>
+											</div>
 										</div>
+										<!-- /product -->
+
+										<!-- /product -->
 									</div>
-									<div class="product-body">
-										<p class="product-category">{{ data.categoria }}</p>
-										<h3 class="product-name"><a href="#">{{ data.producto }}</a></h3>
-										<h4 class="product-price">Bs. {{ data.precio }}
-											<!-- <del class="product-old-price">$990.00</del>-->
-											</h4>
-										<div class="product-rating">
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-										</div>
-										<div class="product-btns">
-											<button class="add-to-wishlist" @click="disminuirCarrito(index)"><i class="icon-close"></i><span class="tooltipp">disminuir</span></button>
-											<button class="add-to-compare fa-satck"><i class="fa fa-stack" v-text="data.cantidad"></i><span class="tooltipp">Cantidad</span></button>
-											<button class="quick-view" @click="aumentarCarrito(index)" ><i class="icon-plus"></i><span class="tooltipp">aumentar</span></button>
-										</div>
-									</div>
-									<div class="add-to-cart">
-										<button class="add-to-cart-btn" @click="agregarDetalleModal(data)"><i class="fa fa-shopping-cart"></i> add to cart</button>
-									</div>
+									<div id="slick-nav-1" class="products-slick-nav"></div>
 								</div>
+								<!-- /tab -->
 							</div>
-							
-							</div>
-						
 						</div>
-
-						<div class="store-filter clearfix">
-							<span class="store-qty">productos</span>
-							<ul class="store-pagination">
-
-									 <li class="page-item" v-if="pagination.current_page > 1">
-                  <a
-                    class="page-link"
-                    href="#"
-                    @click.prevent="cambiarPagina(pagination.current_page - 1,buscar,criterio)"
-                  >Ant</a>
-                </li>
-                <li
-                  class="page-item"
-                  v-for="page in pagesNumber"
-                  :key="page"
-                  :class="[page == isActived ? 'active' : '']">
-                  <a
-                    class="page-link"
-                    href="#"
-                    @click.prevent="cambiarPagina(page,buscar,criterio)"
-                    v-text="page"
-                  ></a>
-                </li>
-                <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                  <a
-                    class="page-link"
-                    href="#"
-                    @click.prevent="cambiarPagina(pagination.current_page + 1,buscar,criterio)"
-                  >Sig</a>
-                </li>
-
-							</ul>
-						</div>
-						<!-- /store bottom filter -->
 					</div>
-					<div class="col-md-1">
-
-					</div>
-					<!-- /STORE -->
+					<!-- Products tab & slick -->
 				</div>
 				<!-- /row -->
 			</div>
 			<!-- /container -->
 		</div>
+		<!-- /SECTION -->
+
+		<!-- HOT DEAL SECTION -->
+		
+		<!-- /HOT DEAL SECTION -->
+
+		<!-- SECTION -->
+		
+		<!-- /SECTION -->
+
+		<!-- /SECTION -->
+
 
 </div>
 
 </template>
-
 
 <script>
 import Vue from 'vue'
@@ -239,7 +258,7 @@ data() {
 	   criterio:"productos",
 	   buscar:"",
 	   mirar:0,
-	   totalPedido:0
+	   recargar:false
 	};
 },
 computed: {
@@ -320,10 +339,9 @@ listarCategoria() {
           producto: data["producto"],
           categoria:data["categoria"] ,
           precio: data["precio"],
-		  cantidad:data["cantidad"],
+		  cantidad:1,
 		  imagen:data["imagen"]
 		});
-		me.totalPedido=me.totalPedido+(data["precio"]*data["cantidad"]);
 		Swal.fire({
                   position: "center",
                   type: "success",
@@ -342,29 +360,9 @@ listarCategoria() {
       }
       return sw;
     },
-	eliminarDetalle(index) {
+	  eliminarDetalle(index) {
 	  let me = this;
 	  me.arrayDetalle.splice(index, 1);
-	  me.totalPedido=me.totalPedido-(arrayDetalle["precio"]*arrayDetalle["cantidad"]);
-	},
-	aumentarCarrito(index) {
-		let me =this;
-		me.arrayData[index].cantidad=me.arrayData[index].cantidad+1;
-	},
-	disminuirCarrito(index) {
-		let me =this;
-		if(me.arrayData[index].cantidad==1){
-	  	Swal.fire({
-                  position: "center",
-                  type: "error",
-                  title: "No puede Disminuir",
-                  showConfirmButton: false,
-                  timer: 1000
-                });
-		}
-		else{
-	  me.arrayData[index].cantidad=me.arrayData[index].cantidad-1;
-	  }
     },
 
   },
@@ -372,6 +370,7 @@ mounted(){
 // this.recargar=t;
 this.listar(1, this.buscar, this.criterio);
 this.listarCategoria();
+this.recargar=true;
  }
 };
 

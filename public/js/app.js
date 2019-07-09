@@ -2944,25 +2944,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -2991,7 +2972,7 @@ __webpack_require__.r(__webpack_exports__);
       criterio: "productos",
       buscar: "",
       mirar: 0,
-      recargar: false
+      totalPedido: 0
     };
   },
   computed: {
@@ -3072,9 +3053,10 @@ __webpack_require__.r(__webpack_exports__);
           producto: data["producto"],
           categoria: data["categoria"],
           precio: data["precio"],
-          cantidad: 1,
+          cantidad: data["cantidad"],
           imagen: data["imagen"]
         });
+        me.totalPedido = me.totalPedido + data["precio"] * data["cantidad"];
         Swal.fire({
           position: "center",
           type: "success",
@@ -3098,13 +3080,32 @@ __webpack_require__.r(__webpack_exports__);
     eliminarDetalle: function eliminarDetalle(index) {
       var me = this;
       me.arrayDetalle.splice(index, 1);
+      me.totalPedido = me.totalPedido - arrayDetalle["precio"] * arrayDetalle["cantidad"];
+    },
+    aumentarCarrito: function aumentarCarrito(index) {
+      var me = this;
+      me.arrayData[index].cantidad = me.arrayData[index].cantidad + 1;
+    },
+    disminuirCarrito: function disminuirCarrito(index) {
+      var me = this;
+
+      if (me.arrayData[index].cantidad == 1) {
+        Swal.fire({
+          position: "center",
+          type: "error",
+          title: "No puede Disminuir",
+          showConfirmButton: false,
+          timer: 1000
+        });
+      } else {
+        me.arrayData[index].cantidad = me.arrayData[index].cantidad - 1;
+      }
     }
   },
   mounted: function mounted() {
     // this.recargar=t;
     this.listar(1, this.buscar, this.criterio);
     this.listarCategoria();
-    this.recargar = true;
   }
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('v-select', vue_select__WEBPACK_IMPORTED_MODULE_1___default.a);
@@ -26991,7 +26992,7 @@ var render = function() {
     _c("div", { attrs: { id: "header" } }, [
       _c("div", { staticClass: "container" }, [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-md-6" }, [
+          _c("div", { staticClass: "col-md-3" }, [
             _c("div", { staticClass: "header-logo" }, [
               _c("a", { staticClass: "logo", attrs: { href: "" } }, [
                 _c("img", { attrs: { src: "img/logo.png", alt: "" } })
@@ -26999,10 +27000,101 @@ var render = function() {
             ])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "col-md-6 clearfix" }, [
+          _c("div", { staticClass: "col-md-6" }, [
+            _c("div", { staticClass: "header-search" }, [
+              _c("form", [
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.criterio,
+                        expression: "criterio"
+                      }
+                    ],
+                    staticClass: "input-select",
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.criterio = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      }
+                    }
+                  },
+                  [
+                    _c("option", { attrs: { value: "productos" } }, [
+                      _vm._v("Todos")
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "productos" } }, [
+                      _vm._v("Productos")
+                    ]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "categorias" } }, [
+                      _vm._v("Categorias")
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.buscar,
+                      expression: "buscar"
+                    }
+                  ],
+                  staticClass: "input",
+                  attrs: { placeholder: "Search here" },
+                  domProps: { value: _vm.buscar },
+                  on: {
+                    keyup: function($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      return _vm.listar(1, _vm.buscar, _vm.criterio)
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.buscar = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "search-btn",
+                    on: {
+                      click: function($event) {
+                        return _vm.listar(1, _vm.buscar, _vm.criterio)
+                      }
+                    }
+                  },
+                  [_vm._v("Search")]
+                )
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-3 clearfix" }, [
             _c("div", { staticClass: "header-ctn" }, [
-              _vm._m(0),
-              _vm._v(" "),
               _c("div", { staticClass: "dropdown" }, [
                 _c(
                   "a",
@@ -27054,7 +27146,8 @@ var render = function() {
                                 _vm._v(_vm._s(detalle.cantidad))
                               ]),
                               _vm._v(
-                                "$ " + _vm._s(detalle.precio * detalle.cantidad)
+                                "Bs. " +
+                                  _vm._s(detalle.precio * detalle.cantidad)
                               )
                             ])
                           ]),
@@ -27077,124 +27170,239 @@ var render = function() {
                     0
                   ),
                   _vm._v(" "),
-                  _vm._m(1),
+                  _c("div", { staticClass: "cart-summary" }, [
+                    _c("small", [
+                      _vm._v(
+                        _vm._s(_vm.arrayDetalle.length) + " productos marcados"
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _c("h5", [_vm._v("TOTAL: Bs. " + _vm._s(_vm.totalPedido))])
+                  ]),
                   _vm._v(" "),
-                  _vm._m(2)
+                  _vm._m(0)
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(3)
+              _vm._m(1)
             ])
           ])
         ])
       ])
     ]),
     _vm._v(" "),
-    _vm._m(4),
-    _vm._v(" "),
     _c("div", { staticClass: "section" }, [
       _c("div", { staticClass: "container" }, [
-        _c(
-          "div",
-          { staticClass: "row" },
-          [
-            _vm.regargar ? [_vm._m(5)] : _vm._e(),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-12" }, [
-              _c("div", { staticClass: "row" }, [
-                _c("div", { staticClass: "products-tabs" }, [
-                  _c(
-                    "div",
-                    { staticClass: "tab-pane active", attrs: { id: "tab1" } },
-                    [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "products-slick",
-                          attrs: { "data-nav": "#slick-nav-1" }
-                        },
-                        _vm._l(_vm.arrayData, function(data) {
-                          return _c(
-                            "div",
-                            { key: data.id, staticClass: "product" },
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-1" }),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-10", attrs: { id: "store" } }, [
+            _c(
+              "div",
+              { staticClass: "row" },
+              _vm._l(_vm.arrayData, function(data, index) {
+                return _c("div", { key: data.id }, [
+                  _c("div", { staticClass: "col-md-4 col-xs-6" }, [
+                    _c("div", { staticClass: "product" }, [
+                      _c("div", { staticClass: "product-img" }, [
+                        _c("img", {
+                          attrs: {
+                            src: "imagenes/productos/" + data.imagen,
+                            whith: "200",
+                            height: "200",
+                            alt: ""
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm._m(2, true)
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "product-body" }, [
+                        _c("p", { staticClass: "product-category" }, [
+                          _vm._v(_vm._s(data.categoria))
+                        ]),
+                        _vm._v(" "),
+                        _c("h3", { staticClass: "product-name" }, [
+                          _c("a", { attrs: { href: "#" } }, [
+                            _vm._v(_vm._s(data.producto))
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("h4", { staticClass: "product-price" }, [
+                          _vm._v(
+                            "Bs. " +
+                              _vm._s(data.precio) +
+                              "\r\n\t\t\t\t\t\t\t\t\t\t\t"
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _vm._m(3, true),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "product-btns" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "add-to-wishlist",
+                              on: {
+                                click: function($event) {
+                                  return _vm.disminuirCarrito(index)
+                                }
+                              }
+                            },
                             [
-                              _c("div", { staticClass: "product-img" }, [
-                                _c("img", {
-                                  attrs: {
-                                    src: "imagenes/productos/" + data.imagen,
-                                    alt: ""
-                                  }
-                                }),
-                                _vm._v(" "),
-                                _vm._m(6, true)
-                              ]),
-                              _vm._v(" "),
-                              _c("div", { staticClass: "product-body" }, [
-                                _c("p", { staticClass: "product-category" }, [
-                                  _vm._v(_vm._s(data.categoria))
-                                ]),
-                                _vm._v(" "),
-                                _c("h3", { staticClass: "product-name" }, [
-                                  _c("a", { attrs: { href: "#" } }, [
-                                    _vm._v(_vm._s(data.producto))
-                                  ])
-                                ]),
-                                _vm._v(" "),
-                                _c("h4", { staticClass: "product-price" }, [
-                                  _vm._v("$" + _vm._s(data.precio) + " "),
-                                  _c(
-                                    "del",
-                                    { staticClass: "product-old-price" },
-                                    [_vm._v("$00")]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _vm._m(7, true),
-                                _vm._v(" "),
-                                _vm._m(8, true)
-                              ]),
-                              _vm._v(" "),
-                              data.estado == 1
-                                ? _c("div", { staticClass: "add-to-cart" }, [
-                                    _c(
-                                      "button",
-                                      {
-                                        staticClass: "add-to-cart-btn",
-                                        on: {
-                                          click: function($event) {
-                                            return _vm.agregarDetalleModal(data)
-                                          }
-                                        }
-                                      },
-                                      [
-                                        _c("i", {
-                                          staticClass: "fa fa-shopping-cart"
-                                        }),
-                                        _vm._v(" carrito")
-                                      ]
-                                    )
-                                  ])
-                                : _c("div", { staticClass: "add-to-cart" }, [
-                                    _vm._m(9, true)
-                                  ])
+                              _c("i", { staticClass: "icon-close" }),
+                              _c("span", { staticClass: "tooltipp" }, [
+                                _vm._v("disminuir")
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            { staticClass: "add-to-compare fa-satck" },
+                            [
+                              _c("i", {
+                                staticClass: "fa fa-stack",
+                                domProps: { textContent: _vm._s(data.cantidad) }
+                              }),
+                              _c("span", { staticClass: "tooltipp" }, [
+                                _vm._v("Cantidad")
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "quick-view",
+                              on: {
+                                click: function($event) {
+                                  return _vm.aumentarCarrito(index)
+                                }
+                              }
+                            },
+                            [
+                              _c("i", { staticClass: "icon-plus" }),
+                              _c("span", { staticClass: "tooltipp" }, [
+                                _vm._v("aumentar")
+                              ])
                             ]
                           )
-                        }),
-                        0
-                      ),
+                        ])
+                      ]),
                       _vm._v(" "),
-                      _c("div", {
-                        staticClass: "products-slick-nav",
-                        attrs: { id: "slick-nav-1" }
-                      })
-                    ]
-                  )
+                      _c("div", { staticClass: "add-to-cart" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "add-to-cart-btn",
+                            on: {
+                              click: function($event) {
+                                return _vm.agregarDetalleModal(data)
+                              }
+                            }
+                          },
+                          [
+                            _c("i", { staticClass: "fa fa-shopping-cart" }),
+                            _vm._v(" add to cart")
+                          ]
+                        )
+                      ])
+                    ])
+                  ])
                 ])
-              ])
+              }),
+              0
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "store-filter clearfix" }, [
+              _c("span", { staticClass: "store-qty" }, [_vm._v("productos")]),
+              _vm._v(" "),
+              _c(
+                "ul",
+                { staticClass: "store-pagination" },
+                [
+                  _vm.pagination.current_page > 1
+                    ? _c("li", { staticClass: "page-item" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "page-link",
+                            attrs: { href: "#" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.cambiarPagina(
+                                  _vm.pagination.current_page - 1,
+                                  _vm.buscar,
+                                  _vm.criterio
+                                )
+                              }
+                            }
+                          },
+                          [_vm._v("Ant")]
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm._l(_vm.pagesNumber, function(page) {
+                    return _c(
+                      "li",
+                      {
+                        key: page,
+                        staticClass: "page-item",
+                        class: [page == _vm.isActived ? "active" : ""]
+                      },
+                      [
+                        _c("a", {
+                          staticClass: "page-link",
+                          attrs: { href: "#" },
+                          domProps: { textContent: _vm._s(page) },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.cambiarPagina(
+                                page,
+                                _vm.buscar,
+                                _vm.criterio
+                              )
+                            }
+                          }
+                        })
+                      ]
+                    )
+                  }),
+                  _vm._v(" "),
+                  _vm.pagination.current_page < _vm.pagination.last_page
+                    ? _c("li", { staticClass: "page-item" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "page-link",
+                            attrs: { href: "#" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.cambiarPagina(
+                                  _vm.pagination.current_page + 1,
+                                  _vm.buscar,
+                                  _vm.criterio
+                                )
+                              }
+                            }
+                          },
+                          [_vm._v("Sig")]
+                        )
+                      ])
+                    : _vm._e()
+                ],
+                2
+              )
             ])
-          ],
-          2
-        )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-1" })
+        ])
       ])
     ])
   ])
@@ -27204,35 +27412,11 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("a", { attrs: { href: "#" } }, [
-        _c("i", { staticClass: "fa fa-heart-o" }),
-        _vm._v(" "),
-        _c("span", [_vm._v("Your Wishlist")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "qty" }, [_vm._v("2")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "cart-summary" }, [
-      _c("small", [_vm._v("3 Item(s) selected")]),
-      _vm._v(" "),
-      _c("h5", [_vm._v("SUBTOTAL: $2940.00")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "cart-btns" }, [
-      _c("a", { attrs: { href: "#" } }, [_vm._v("View Cart")]),
+      _c("a", { attrs: { href: "#" } }, [_vm._v("Ver Carrito")]),
       _vm._v(" "),
       _c("a", { attrs: { href: "#" } }, [
-        _vm._v("Checkout  "),
+        _vm._v("Continuar"),
         _c("i", { staticClass: "fa fa-arrow-circle-right" })
       ])
     ])
@@ -27253,83 +27437,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("nav", { attrs: { id: "navigation" } }, [
-      _c("div", { staticClass: "container" }, [
-        _c("div", { attrs: { id: "responsive-nav" } }, [
-          _c("ul", { staticClass: "main-nav nav navbar-nav" }, [
-            _c("li", { staticClass: "active" }, [
-              _c("a", { attrs: { href: "#" } }, [_vm._v("Home")])
-            ]),
-            _vm._v(" "),
-            _c("li", [
-              _c("a", { attrs: { href: "#" } }, [_vm._v("Hot Deals")])
-            ]),
-            _vm._v(" "),
-            _c("li", [
-              _c("a", { attrs: { href: "#" } }, [_vm._v("Categories")])
-            ]),
-            _vm._v(" "),
-            _c("li", [_c("a", { attrs: { href: "#" } }, [_vm._v("Laptops")])]),
-            _vm._v(" "),
-            _c("li", [
-              _c("a", { attrs: { href: "#" } }, [_vm._v("Smartphones")])
-            ]),
-            _vm._v(" "),
-            _c("li", [_c("a", { attrs: { href: "#" } }, [_vm._v("Cameras")])]),
-            _vm._v(" "),
-            _c("li", [
-              _c("a", { attrs: { href: "#" } }, [_vm._v("Accessories")])
-            ])
-          ])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-12" }, [
-      _c("div", { staticClass: "section-title" }, [
-        _c("h3", { staticClass: "title" }, [_vm._v("New Products")]),
-        _vm._v(" "),
-        _c("div", { staticClass: "section-nav" }, [
-          _c("ul", { staticClass: "section-tab-nav tab-nav" }, [
-            _c("li", { staticClass: "active" }, [
-              _c("a", { attrs: { "data-toggle": "tab", href: "#tab1" } }, [
-                _vm._v("Laptops")
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", [
-              _c("a", { attrs: { "data-toggle": "tab", href: "#tab1" } }, [
-                _vm._v("Smartphones")
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", [
-              _c("a", { attrs: { "data-toggle": "tab", href: "#tab1" } }, [
-                _vm._v("Cameras")
-              ])
-            ]),
-            _vm._v(" "),
-            _c("li", [
-              _c("a", { attrs: { "data-toggle": "tab", href: "#tab1" } }, [
-                _vm._v("Accessories")
-              ])
-            ])
-          ])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "product-label" }, [
-      _c("span", { staticClass: "sale" }, [_vm._v("-30%")]),
-      _vm._v(" "),
       _c("span", { staticClass: "new" }, [_vm._v("NEW")])
     ])
   },
@@ -27347,36 +27455,6 @@ var staticRenderFns = [
       _c("i", { staticClass: "fa fa-star" }),
       _vm._v(" "),
       _c("i", { staticClass: "fa fa-star" })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "product-btns" }, [
-      _c("button", { staticClass: "add-to-wishlist" }, [
-        _c("i", { staticClass: "fa fa-heart-o" }),
-        _c("span", { staticClass: "tooltipp" }, [_vm._v("add to wishlist")])
-      ]),
-      _vm._v(" "),
-      _c("button", { staticClass: "add-to-compare" }, [
-        _c("i", { staticClass: "fa fa-exchange" }),
-        _c("span", { staticClass: "tooltipp" }, [_vm._v("add to compare")])
-      ]),
-      _vm._v(" "),
-      _c("button", { staticClass: "quick-view" }, [
-        _c("i", { staticClass: "fa fa-eye" }),
-        _c("span", { staticClass: "tooltipp" }, [_vm._v("quick view")])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("button", { staticClass: "add-to-cart-btn" }, [
-      _c("i", { staticClass: "fa fa-shopping-cart" }),
-      _vm._v(" agregado")
     ])
   }
 ]
