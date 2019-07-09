@@ -6,7 +6,7 @@
 				<!-- row -->
 				<div class="row">
 					<!-- LOGO -->
-					<div class="col-md-3">
+					<div class="col-md-6">
 						<div class="header-logo">
 							<a href="" class="logo">
 								<img :src="'img/logo.png'" alt="">
@@ -16,22 +16,24 @@
 					<!-- /LOGO -->
 
 					<!-- SEARCH BAR -->
-					<div class="col-md-6">
+					<!-- <div class="col-md-6">
 						<div class="header-search">
-							<form method="POST" action="">
+							<form>
 								<select class="input-select" v-model="criterio" >
-									<option value="0">Todos</option>
-									<option v-for="dataCategoria in arrayCategoria" :key="dataCategoria.id" :value="dataCategoria.id" v-text="dataCategoria.nombre"></option>
-								</select>
+									<option value="productos">Todos</option>
+									<option value="productos">Productos</option>
+									<option value="categorias">Categorias</option>-->
+									<!-- <option v-for="dataCategoria in arrayCategoria" :key="dataCategoria.id" :value="dataCategoria.id" v-text="dataCategoria.nombre"></option> -->
+							<!--	</select>
 								<input class="input" placeholder="Search here" v-model="buscar" @keyup.enter="listar(1,buscar,criterio)">
 								<button class="search-btn" @click="listar(1,buscar,criterio)">Search</button>
 							</form>
 						</div>
-					</div>
+					</div> -->
 					<!-- /SEARCH BAR -->
 
 					<!-- ACCOUNT -->
-					<div class="col-md-3 clearfix">
+					<div class="col-md-6 clearfix">
 						<div class="header-ctn">
 							<!-- Wishlist -->
 							<div>
@@ -52,18 +54,18 @@
 								</a>
 								<div class="cart-dropdown">
 									<div class="cart-list">
-										<div class="product-widget">
+										<div class="product-widget" v-for="(detalle,index) in arrayDetalle" :key="detalle.id">
 											<div class="product-img">
-												<img :src="'img/product01.png'" alt="">
+												<img :src="'imagenes/productos/'+detalle.imagen" alt="">
 											</div>
 											<div class="product-body">
-												<h3 class="product-name"><a href="#">product name goes here</a></h3>
-												<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
+												<h3 class="product-name"><a href="#">{{ detalle.producto }}</a></h3>
+												<h4 class="product-price"><span class="qty">{{ detalle.cantidad }}</span>$ {{ detalle.precio*detalle.cantidad }}</h4>
 											</div>
-											<button class="delete"><i class="fa fa-close"></i></button>
+											<button class="delete"  @click="eliminarDetalle(index)"><i class="fa fa-close"></i></button>
 										</div>
 
-										<div class="product-widget">
+										<!-- <div class="product-widget">
 											<div class="product-img">
 												<img :src="'img/product02.png'" alt="">
 											</div>
@@ -72,7 +74,7 @@
 												<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
 											</div>
 											<button class="delete"><i class="fa fa-close"></i></button>
-										</div>
+										</div> -->
 									</div>
 									<div class="cart-summary">
 										<small>3 Item(s) selected</small>
@@ -103,6 +105,7 @@
 			<!-- container -->
 		</div>
 		<!-- NAVIGATION -->
+				<!-- NAVIGATION -->
 		<nav id="navigation">
 			<!-- container -->
 			<div class="container">
@@ -126,26 +129,9 @@
 		</nav>
 		<!-- /NAVIGATION -->
 
-		<!-- BREADCRUMB -->
-		<div id="breadcrumb" class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<ul class="breadcrumb-tree">
-							<li><a href="#">Home</a></li>
-							<li><a href="#">All Categories</a></li>
-							<li><a href="#">Accessories</a></li>
-							<li class="active">Headphones (227,490 Results)</li>
-						</ul>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /BREADCRUMB -->
+		<!-- SECTION -->
+		
+		<!-- /SECTION -->
 
 		<!-- SECTION -->
 		<div class="section">
@@ -153,499 +139,91 @@
 			<div class="container">
 				<!-- row -->
 				<div class="row">
-					<!-- ASIDE -->
-					<div id="aside" class="col-md-3">
-						<!-- aside Widget -->
-						<div class="aside">
-							<h3 class="aside-title">Categories</h3>
-							<div class="checkbox-filter">
-
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-1">
-									<label for="category-1">
-										<span></span>
-										Laptops
-										<small>(120)</small>
-									</label>
-								</div>
-
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-2">
-									<label for="category-2">
-										<span></span>
-										Smartphones
-										<small>(740)</small>
-									</label>
-								</div>
-
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-3">
-									<label for="category-3">
-										<span></span>
-										Cameras
-										<small>(1450)</small>
-									</label>
-								</div>
-
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-4">
-									<label for="category-4">
-										<span></span>
-										Accessories
-										<small>(578)</small>
-									</label>
-								</div>
-
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-5">
-									<label for="category-5">
-										<span></span>
-										Laptops
-										<small>(120)</small>
-									</label>
-								</div>
-
-								<div class="input-checkbox">
-									<input type="checkbox" id="category-6">
-									<label for="category-6">
-										<span></span>
-										Smartphones
-										<small>(740)</small>
-									</label>
-								</div>
+					<template v-if="regargar">
+					<!-- section title -->
+					<div class="col-md-12">
+						<div class="section-title">
+							<h3 class="title">New Products</h3>
+							<div class="section-nav">
+								<ul class="section-tab-nav tab-nav">
+									<li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
+									<li><a data-toggle="tab" href="#tab1">Smartphones</a></li>
+									<li><a data-toggle="tab" href="#tab1">Cameras</a></li>
+									<li><a data-toggle="tab" href="#tab1">Accessories</a></li>
+								</ul>
 							</div>
 						</div>
-						<!-- /aside Widget -->
-
-						<!-- aside Widget -->
-						<div class="aside">
-							<h3 class="aside-title">Price</h3>
-							<div class="price-filter">
-								<div id="price-slider"></div>
-								<div class="input-number price-min">
-									<input id="price-min" type="number">
-									<span class="qty-up">+</span>
-									<span class="qty-down">-</span>
-								</div>
-								<span>-</span>
-								<div class="input-number price-max">
-									<input id="price-max" type="number">
-									<span class="qty-up">+</span>
-									<span class="qty-down">-</span>
-								</div>
-							</div>
-						</div>
-						<!-- /aside Widget -->
-
-						<!-- aside Widget -->
-						<div class="aside">
-							<h3 class="aside-title">Brand</h3>
-							<div class="checkbox-filter">
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-1">
-									<label for="brand-1">
-										<span></span>
-										SAMSUNG
-										<small>(578)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-2">
-									<label for="brand-2">
-										<span></span>
-										LG
-										<small>(125)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-3">
-									<label for="brand-3">
-										<span></span>
-										SONY
-										<small>(755)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-4">
-									<label for="brand-4">
-										<span></span>
-										SAMSUNG
-										<small>(578)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-5">
-									<label for="brand-5">
-										<span></span>
-										LG
-										<small>(125)</small>
-									</label>
-								</div>
-								<div class="input-checkbox">
-									<input type="checkbox" id="brand-6">
-									<label for="brand-6">
-										<span></span>
-										SONY
-										<small>(755)</small>
-									</label>
-								</div>
-							</div>
-						</div>
-						<!-- /aside Widget -->
-
-						<!-- aside Widget -->
-						<div class="aside">
-							<h3 class="aside-title">Top selling</h3>
-							<div class="product-widget">
-								<div class="product-img">
-									<img :src="'img/product01.png'" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">product name goes here</a></h3>
-									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-								</div>
-							</div>
-
-							<div class="product-widget">
-								<div class="product-img">
-									<img :src="'img/product02.png'" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">product name goes here</a></h3>
-									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-								</div>
-							</div>
-
-							<div class="product-widget">
-								<div class="product-img">
-									<img :src="'img/product03.png'" alt="">
-								</div>
-								<div class="product-body">
-									<p class="product-category">Category</p>
-									<h3 class="product-name"><a href="#">product name goes here</a></h3>
-									<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-								</div>
-							</div>
-						</div>
-						<!-- /aside Widget -->
 					</div>
-					<!-- /ASIDE -->
-
-					<!-- STORE -->
-					<div id="store" class="col-md-9">
-						<!-- store top filter -->
-						<div class="store-filter clearfix">
-							<div class="store-sort">
-								<label>
-									Sort By:
-									<select class="input-select">
-										<option value="0">Popular</option>
-										<option value="1">Position</option>
-									</select>
-								</label>
-
-								<label>
-									Show:
-									<select class="input-select">
-										<option value="0">20</option>
-										<option value="1">50</option>
-									</select>
-								</label>
-							</div>
-							<ul class="store-grid">
-								<li class="active"><i class="fa fa-th"></i></li>
-								<li><a href="#"><i class="fa fa-th-list"></i></a></li>
-							</ul>
-						</div>
-						<!-- /store top filter -->
-
-						<!-- store products -->
+					<!-- /section title -->
+					</template>
+					<!-- Products tab & slick -->
+					<div class="col-md-12">
 						<div class="row">
-							<!-- product -->
-							<div class="col-md-4 col-xs-6">
-								<div class="product">
-									<div class="product-img">
-										<img :src="'img/product01.png'" alt="">
-										<div class="product-label">
-											<span class="sale">-30%</span>
-											<span class="new">NEW</span>
+							<div class="products-tabs">
+								<!-- tab -->
+								<div id="tab1" class="tab-pane active">
+									<div class="products-slick" data-nav="#slick-nav-1">
+										<!-- product -->
+										<div  class="product" v-for="data in arrayData" :key="data.id" >
+											<div class="product-img">
+												<img :src="'imagenes/productos/'+data.imagen"  alt="">
+												<div class="product-label">
+													<span class="sale">-30%</span>
+													<span class="new">NEW</span>
+												</div>
+											</div>
+											<div class="product-body">
+												<p class="product-category">{{ data.categoria }}</p>
+												<h3 class="product-name"><a href="#">{{ data.producto }}</a></h3>
+												<h4 class="product-price">${{ data.precio }} <del class="product-old-price">$00</del></h4>
+												<div class="product-rating">
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+													<i class="fa fa-star"></i>
+												</div>
+												<div class="product-btns">
+													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+													<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+												</div>
+											</div>
+											<div class="add-to-cart" v-if="data.estado==1">
+												<button class="add-to-cart-btn" @click="agregarDetalleModal(data)"><i class="fa fa-shopping-cart"></i> carrito</button>
+											</div>
+											<div class="add-to-cart" v-else>
+												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> agregado</button>
+											</div>
 										</div>
+										<!-- /product -->
+
+										<!-- /product -->
 									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-										<div class="product-rating">
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-										</div>
-										<div class="product-btns">
-											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-											<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-											<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-										</div>
-									</div>
-									<div class="add-to-cart">
-										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-									</div>
+									<div id="slick-nav-1" class="products-slick-nav"></div>
 								</div>
+								<!-- /tab -->
 							</div>
-							<!-- /product -->
-
-							<!-- product -->
-							<div class="col-md-4 col-xs-6">
-								<div class="product">
-									<div class="product-img">
-										<img :src="'img/product02.png'" alt="">
-										<div class="product-label">
-											<span class="new">NEW</span>
-										</div>
-									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-										<div class="product-rating">
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-										</div>
-										<div class="product-btns">
-											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-											<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-											<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-										</div>
-									</div>
-									<div class="add-to-cart">
-										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-									</div>
-								</div>
-							</div>
-							<!-- /product -->
-
-							<div class="clearfix visible-sm visible-xs"></div>
-
-							<!-- product -->
-							<div class="col-md-4 col-xs-6">
-								<div class="product">
-									<div class="product-img">
-										<img :src="'img/product03.png'" alt="">
-									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-										<div class="product-rating">
-										</div>
-										<div class="product-btns">
-											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-											<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-											<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-										</div>
-									</div>
-									<div class="add-to-cart">
-										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-									</div>
-								</div>
-							</div>
-							<!-- /product -->
-
-							<div class="clearfix visible-lg visible-md"></div>
-
-							<!-- product -->
-							<div class="col-md-4 col-xs-6">
-								<div class="product">
-									<div class="product-img">
-										<img :src="'img/product04.png'" alt="">
-									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-										<div class="product-rating">
-										</div>
-										<div class="product-btns">
-											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-											<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-											<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-										</div>
-									</div>
-									<div class="add-to-cart">
-										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-									</div>
-								</div>
-							</div>
-							<!-- /product -->
-
-							<div class="clearfix visible-sm visible-xs"></div>
-
-							<!-- product -->
-							<div class="col-md-4 col-xs-6">
-								<div class="product">
-									<div class="product-img">
-										<img :src="'img/product05.png'" alt="">
-									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-										<div class="product-rating">
-										</div>
-										<div class="product-btns">
-											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-											<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-											<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-										</div>
-									</div>
-									<div class="add-to-cart">
-										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-									</div>
-								</div>
-							</div>
-							<!-- /product -->
-
-							<!-- product -->
-							<div class="col-md-4 col-xs-6">
-								<div class="product">
-									<div class="product-img">
-										<img :src="'img/product06.png'" alt="">
-									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-										<div class="product-rating">
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star-o"></i>
-										</div>
-										<div class="product-btns">
-											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-											<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-											<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-										</div>
-									</div>
-									<div class="add-to-cart">
-										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-									</div>
-								</div>
-							</div>
-							<!-- /product -->
-
-							<div class="clearfix visible-lg visible-md visible-sm visible-xs"></div>
-
-							<!-- product -->
-							<div class="col-md-4 col-xs-6">
-								<div class="product">
-									<div class="product-img">
-										<img :src="'img/product07.png'" alt="">
-									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-										<div class="product-rating">
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-											<i class="fa fa-star"></i>
-										</div>
-										<div class="product-btns">
-											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-											<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-											<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-										</div>
-									</div>
-									<div class="add-to-cart">
-										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-									</div>
-								</div>
-							</div>
-							<!-- /product -->
-
-							<!-- product -->
-							<div class="col-md-4 col-xs-6">
-								<div class="product">
-									<div class="product-img">
-										<img :src="'img/product08.png'" alt="">
-									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-										<div class="product-rating">
-										</div>
-										<div class="product-btns">
-											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-											<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-											<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-										</div>
-									</div>
-									<div class="add-to-cart">
-										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-									</div>
-								</div>
-							</div>
-							<!-- /product -->
-
-							<div class="clearfix visible-sm visible-xs"></div>
-
-							<!-- product -->
-							<div class="col-md-4 col-xs-6">
-								<div class="product">
-									<div class="product-img">
-										<img :src="'img/product09.png'" alt="">
-									</div>
-									<div class="product-body">
-										<p class="product-category">Category</p>
-										<h3 class="product-name"><a href="#">product name goes here</a></h3>
-										<h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-										<div class="product-rating">
-										</div>
-										<div class="product-btns">
-											<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-											<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-											<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-										</div>
-									</div>
-									<div class="add-to-cart">
-										<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-									</div>
-								</div>
-							</div>
-							<!-- /product -->
 						</div>
-						<!-- /store products -->
-
-						<!-- store bottom filter -->
-						<div class="store-filter clearfix">
-							<span class="store-qty">Showing 20-100 products</span>
-							<ul class="store-pagination">
-								<li class="active">1</li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
-							</ul>
-						</div>
-						<!-- /store bottom filter -->
 					</div>
-					<!-- /STORE -->
+					<!-- Products tab & slick -->
 				</div>
 				<!-- /row -->
 			</div>
 			<!-- /container -->
 		</div>
+		<!-- /SECTION -->
+
+		<!-- HOT DEAL SECTION -->
+		
+		<!-- /HOT DEAL SECTION -->
+
+		<!-- SECTION -->
+		
+		<!-- /SECTION -->
+
+		<!-- /SECTION -->
+
 
 </div>
 
@@ -677,8 +255,10 @@ data() {
         to: 0
 	  },
 	   offset: 3,
-	   criterio:0,
-	   buscar:""
+	   criterio:"productos",
+	   buscar:"",
+	   mirar:0,
+	   recargar:false
 	};
 },
 computed: {
@@ -710,7 +290,7 @@ methods: {
 	    listar(page, buscar, criterio) {
       let me = this;
       var url =
-        "/producto?page=" + page + "&buscar=" + buscar + "&criterio=" + criterio;
+        "/producto/listarProducto?page=" + page + "&buscar=" + buscar + "&criterio=" + criterio;
       axios
         .get(url)
         .then(function(response) {
@@ -743,14 +323,56 @@ listarCategoria() {
           console.log(error);
         });
 	},
+	agregarDetalleModal(data = []) {
+      let me = this;
+      if (me.encuentra(data["id"])) {
+         Swal.fire({
+              position: "center",
+              type: "error",
+              title: "Se encuentra Agregado",
+              showConfirmButton: false,
+              timer: 1000
+            });
+      } else {
+        me.arrayDetalle.push({
+          id: data["id"],
+          producto: data["producto"],
+          categoria:data["categoria"] ,
+          precio: data["precio"],
+		  cantidad:1,
+		  imagen:data["imagen"]
+		});
+		Swal.fire({
+                  position: "center",
+                  type: "success",
+                  title: "Agregado al Carrito",
+                  showConfirmButton: false,
+                  timer: 1000
+                });
+      }
+	},
+	  encuentra(id) {
+      var sw = 0;
+      for (var i = 0; i < this.arrayDetalle.length; i++) {
+        if (this.arrayDetalle[i].id == id) {
+          sw = true;
+        }
+      }
+      return sw;
+    },
+	  eliminarDetalle(index) {
+	  let me = this;
+	  me.arrayDetalle.splice(index, 1);
+    },
 
   },
 mounted(){
+// this.recargar=t;
+this.listar(1, this.buscar, this.criterio);
 this.listarCategoria();
-// this.listar(1, this.buscar, this.criterio);
-
+this.recargar=true;
  }
+};
 
-};	
 Vue.component('v-select', vSelect)
 </script>

@@ -40,11 +40,12 @@ mix.styles([
     //  'resources/plantilla/registro/js/template.js',
      'resources/plantilla/registro/js/sweetalert2.all.min.js'
    ],'public/js/plantilla.js')
-      .scripts([
+    .scripts([
         'resources/plantilla/inicio/js/jquery.min.js',
          'resources/plantilla/inicio/js/bootstrap.min.js',
          'resources/plantilla/inicio/js/slick.min.js',
          'resources/plantilla/inicio/js/nouislider.min.js',
          'resources/plantilla/inicio/js/jquery.zoom.min.js',
+         'resources/plantilla/inicio/js/sweetalert2.all.min.js',
          'resources/plantilla/inicio/js/main.js'],'public/js/inicio.js')
    .js(['resources/js/app.js'],'public/js/app.js');

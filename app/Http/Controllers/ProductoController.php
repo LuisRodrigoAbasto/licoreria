@@ -55,6 +55,30 @@ class ProductoController extends Controller
     }
 
 
+    public function listarProducto(Request $request)
+    {
+       // if(!$request->ajax()) return redirect('/');
+
+        $buscar = $request->buscar;
+        $criterio = $request->criterio;
+        $productos = Producto::join('categorias','productos.idCategoria','=','categorias.id')
+        ->select('productos.id','idCategoria','categorias.nombre as categoria','productos.nombre as producto','descripcion','productos.precio','imagen','stock','productos.estado')
+        ->where('productos.estado','=','1')->where($criterio.'.nombre', 'like','%'.$buscar.'%')->orderBy('productos.id','desc')->paginate(5);
+        return [
+            'pagination' => [
+                'total'        => $productos->total(),
+                'current_page' => $productos->currentPage(),
+                'per_page'     => $productos->perPage(),
+                'last_page'    => $productos->lastPage(),
+                'from'         => $productos->firstItem(),
+                'to'           => $productos->lastItem(),
+            ],
+            'productos' => $productos
+        ];
+        
+    }
+
+
     public function store(Request $request)
     {
         \Log::info($request->all());
