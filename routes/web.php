@@ -55,6 +55,8 @@ Route::put('/venta/actualizar', 'VentaController@update');
 Route::put('/venta/desactivar', 'VentaController@desactivar');
 Route::put('/venta/activar', 'VentaController@activar');
 
+Route::get('/usuario/login','UsuarioController@Login');
+
 // Route::get('/','Auth\LoginController@showLoginForm');
 // Route::post('/login','Auth\LoginController@login')->name('login');
 

@@ -72,7 +72,7 @@
           </a>
         </li>
         <li class="nav-item d-md-down-none">
-          <a class="nav-link" href="#">
+          <a class="nav-link">
             {{-- <i class="icon-location-pin"></i> --}}
             {{ Auth::user()->name }} <span class="caret"></span>
           </a>

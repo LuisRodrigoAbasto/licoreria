@@ -28,7 +28,16 @@ class UsuarioController extends Controller
         ];
 
     }
+    public function login(Request $request)
+    {
+        $email=$request->email;
+        $password=$request->password;
+        $usuario = Usuario::where('email','=',$email)->where('password','=',$password)
+        // ->take(1)
+        ->get(); 
 
+        return ['usuario'=> $usuario];
+    }
     public function selectUsuario(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
