@@ -21,9 +21,9 @@ Route::get('/',function(){
 
 
 // Route::group(['middleware'=>['auth']],function(){
-    Route::get('/registro',function(){
+    Route::get('/sistema',function(){
         return view('contenido/contenido');
-    })->name('registro');
+    })->name('sistema');
    
 
 Route::get('/categoria', 'CategoriaController@index');

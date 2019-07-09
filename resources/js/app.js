@@ -32,6 +32,7 @@ Vue.component('categoria', require('./components/Categoria.vue').default);
 Vue.component('producto', require('./components/Producto.vue').default);
 Vue.component('venta', require('./components/Venta.vue').default);
 Vue.component('principal', require('./components/Principal.vue').default);
+Vue.component('login', require('./components/Login.vue').default);
 const app = new Vue({
     el: '#app',
     data :{

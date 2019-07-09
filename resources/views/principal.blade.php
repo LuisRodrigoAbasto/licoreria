@@ -121,7 +121,7 @@
               <i class="fa fa-shield"></i> Lock Account</a>
             <a class="dropdown-item"  onclick="event.preventDefault();
             document.getElementById('logout-form').submit();">
-              <i class="fa fa-lock"></i> Logout</a>
+              <i class="fa fa-lock"></i> Salir</a>
               <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf
             </form>

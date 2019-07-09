@@ -1,5 +1,25 @@
 <template>
 <div>
+
+		<header>
+			<!-- TOP HEADER -->
+			<div id="top-header">
+				<div class="container">
+					<ul class="header-links pull-left">
+						<li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
+						<li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
+						<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+					</ul>
+					<ul class="header-links pull-right">
+						
+						<!-- <li><a href="#"><i class="fa fa-dollar"></i> USD</a></li> -->
+						<li><a href="#"  data-toggle="modal" data-target="#exampleModal"><i class="fa fa-user-o"></i> Login</a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- /TOP HEADER -->
+
+			
         <div id="header">
 			<!-- container -->
 			<div class="container">
@@ -104,6 +124,8 @@
 			</div>
 			<!-- container -->
 		</div>
+		</header>
+
 
 		<div class="section">
 			<!-- container -->
@@ -205,6 +227,52 @@
 			<!-- /container -->
 		</div>
 
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">LOGIN</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+		  <form action method="post" class="form-horizontal">
+              <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
+                <div class="col-md-9">
+                  <input
+                    type="text"
+                    v-model="email"
+                    class="form-control"
+                    placeholder="example@email.com"
+                  />
+                </div>
+              </div>
+			  <div class="form-group row">
+                <label class="col-md-3 form-control-label" for="text-input">Contraseña</label>
+                <div class="col-md-9">
+                  <input
+                    type="password"
+                    v-model="password"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+             <div v-if="!errorUsuario">
+				 <label for="" class="form-control-label">Los Datos no Son Correctos</label>
+			 </div>
+            </form>             
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Iniciar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 
 </template>
@@ -239,7 +307,9 @@ data() {
 	   criterio:"productos",
 	   buscar:"",
 	   mirar:0,
-	   totalPedido:0
+	   totalPedido:0,
+	   email:"",
+	   password:""
 	};
 },
 computed: {
@@ -365,7 +435,22 @@ listarCategoria() {
 		else{
 	  me.arrayData[index].cantidad=me.arrayData[index].cantidad-1;
 	  }
-    },
+	},
+	login()
+	{
+      let me = this;
+      var url =
+        "/usuario/login?email="+this.email+"&paswword"+this.password;
+      axios
+        .get(url)
+        .then(function(response) {
+          let respuesta = response.data;
+          me.arrayCategoria = respuesta.categorias;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+	}
 
   },
 mounted(){
