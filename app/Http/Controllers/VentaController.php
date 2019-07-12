@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Venta;
 use App\DetalleVenta;
+use App\Producto;
 
 class VentaController extends Controller
 {
@@ -64,6 +65,8 @@ class VentaController extends Controller
                 $detalle_venta->cantidad = $det['cantidad'];   
                 $detalle_venta->precio = $det['precio']*$detalle_venta->cantidad; 
                 $detalle_venta->save();
+
+                $productos = Producto:: updateOrInsert(['id' =>$det['id']],['stock'=>$det['stock']-$det['cantidad']]);
             } 
 
             DB::commit();

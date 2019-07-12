@@ -17,7 +17,7 @@ class CreatePedidosTable extends Migration
             $table->increments('id');
             $table->unsignedinteger('idCliente');
             $table->unsignedinteger('idUbicacion');
-            $table->unsignedinteger('idUsuario');
+            $table->unsignedinteger('idUsuario')->nullable();
             $table->datetime('fechaPedido');
             $table->datetime('fechaEntrega');
             $table->decimal('monto',20,2);

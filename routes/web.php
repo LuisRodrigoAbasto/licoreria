@@ -21,11 +21,11 @@ Route::get('/',function(){
 
 
 // Route::group(['middleware'=>['auth']],function(){
-    Route::get('/sistema',function(){
+    Route::get('/licoreria',function(){
         return view('contenido/contenido');
-    })->name('sistema');
-   
-
+    })->name('registro');
+ 
+       
 Route::get('/categoria', 'CategoriaController@index');
 Route::post('/categoria/registrar', 'CategoriaController@store');
 Route::put('/categoria/actualizar', 'CategoriaController@update');
@@ -56,6 +56,14 @@ Route::put('/venta/desactivar', 'VentaController@desactivar');
 Route::put('/venta/activar', 'VentaController@activar');
 
 Route::get('/usuario/login','UsuarioController@Login');
+
+
+Route::get('/pedido', 'PedidoController@index');
+Route::post('/pedido/registrar', 'PedidoController@store');
+Route::put('/pedido/actualizar', 'PedidoController@update');
+Route::put('/pedido/desactivar', 'PedidoController@desactivar');
+Route::put('/pedido/activar', 'PedidoController@activar');
+
 
 // Route::get('/','Auth\LoginController@showLoginForm');
 // Route::post('/login','Auth\LoginController@login')->name('login');

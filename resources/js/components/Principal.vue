@@ -50,7 +50,7 @@
             </li>
             <!-- <li v-if="arrayUsuario.length==1"><a href="#"><i class="fa fa-dollar"></i> USD</a></li> -->
             <li v-else>
-              <a href="#" data-toggle="modal" data-target="#exampleModal">
+              <a href="#" data-toggle="modal" data-target="#loginModal">
                 <i class="fa fa-user-o"></i> Login
               </a>
             </li>
@@ -156,7 +156,7 @@
                       <h5>TOTAL: Bs. {{ totalPedido }}</h5>
                     </div>
                     <div class="cart-btns">
-                      <a href="#">Ver Carrito</a>
+                      <a href="#" @click="atras()">Ver Productos</a>
                       <a href="#" @click="adelante()">
                         Continuar
                         <i class="fa fa-arrow-circle-right"></i>
@@ -299,29 +299,50 @@
           <div class="row">
             <div class="col-md-7">
               <!-- Billing Details -->
-              <div class="billing-details" v-for="data in arrayUsuario" :key="data.id">
+              <div class="billing-details">
                 <div class="section-title">
                   <h3 class="title">Billing address</h3>
                 </div>
                 <div class="form-group">
                   <label class="col-md-3 form-control-label" for="text-input">NOMBRE</label>
-                  <input class="input" type="text" name="first-name" v-model="data.nombre" placeholder="First Name" />
-                </div>
-                <div class="form-group">
-                  <input class="input" type="text" name="last-name" v-model="data.apellido" placeholder="Last Name" />
-                </div>
-                <div class="form-group">
-                  <input class="input" type="email" v-model="data.email" name="email" placeholder="Email" />
-                </div>
-				 <div class="form-group">
-                  <input class="input" type="tel" name="tel" v-model="data.telefono" placeholder="Telephone" />
-                </div>
+                  <input
+                    class="input"
+                    type="text"
+                    name="first-name"
+                    v-model="cliente"
+                    
+                    placeholder="First Name"
+                  >
                 
+                </div>Ubicacion
+                <input type="text" class="form-control" id="coords" name="coordenada" :ubicacion="'{{ $ubicacion }}'" >
+                <!-- <label id="ubicacion" ref="ubi"></label> -->
+                <label for="ubicacion">{{ ubicacion }}</label>
+                <br />Longitud
+                <input
+                  class="xy form-control"
+                  type="text"
+                  id="longitud"
+                >
+                <!-- <label  class="xy"
+                  id="longitud"
+                  ref="long" ></label> -->
+                <br />Latidud
+                <!-- <label class="xy" id="latitud"   ref="lat"></label> -->
+                <input class="xy form-control" type="text" id="latitud">
                 <div class="form-group">
-                  <input class="input" type="text" name="country" placeholder="Country" />
-				   <label class="custom-file-label" for="customFileLang">Ubicacion</label>
+                  <input
+                    class="input"
+                    type="submit"
+                    placeholder="Ubicacion"
+                    @click="abrirMapa()"
+                    value="Ubicacion"
+                    data-toggle="modal"
+                    data-target="#maps"
+                  />
+                  <input class="input" type="text" placeholder="Ubicacion" />
+                  <!-- <label class="custom-file-label" for="customFileLang">Ubicacion</label> -->
                 </div>
-               
               </div>
 
               <div class="order-notes">
@@ -429,7 +450,7 @@
                   <a href="#">terms & conditions</a>
                 </label>
               </div>
-              <a href="#" class="primary-btn order-submit">Place order</a>
+              <a href="#" class="primary-btn order-submit" @click="registrarPedido()">Place order</a>
             </div>
             <!-- /Order Details -->
           </div>
@@ -439,18 +460,19 @@
       </div>
       <!-- /SECTION -->
     </template>
+
     <div
       class="modal fade"
-      id="exampleModal"
+      id="loginModal"
       tabindex="-1"
       role="dialog"
-      aria-labelledby="exampleModalLabel"
+      aria-labelledby="loginModalLabel"
       aria-hidden="true"
     >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">LOGIN</h5>
+            <h5 class="modal-title" id="loginModalLabel">LOGIN</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -499,10 +521,17 @@
 import Vue from "vue";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
+import { get } from 'http';
+// import * as VueGoogleMaps from "vue2-google-maps";
+// Vue.use(VueGoogleMaps,{
+//     load:{
+//         key: "YOUR_API_TOKEN"
+//     }
+// });
+
 export default {
   data() {
     return {
-      idProducto: 0,
       idCategoria: 0,
       producto: "",
       precio: 0,
@@ -530,10 +559,17 @@ export default {
       arrayUsuario: [],
       cerrar: "",
       errorUsuario: false,
-      siguiente: 0
+      idCliente: 0,
+      cliente: 0,
+      siguiente: 0,
+      ubicacion:0,
+      latitud:0,
+      longitud:0,
+      stock:0
     };
   },
   computed: {
+    coorde:function(){ return window.pedido;},
     isActived: function() {
       return this.pagination.current_page;
     },
@@ -599,6 +635,37 @@ export default {
           console.log(error);
         });
     },
+  cambiarDato(ubicacion,latitud,longitud)
+  {
+    let me=this;
+        // me.ubicacion= ubicacion;
+        // me.latitud= latitud;
+        // me.longitud= longitud;
+        me.ubicacion=function(){ window.serverData;}
+  },
+    registrarPedido() {
+      let me = this;
+    // this.cambiarDato();
+      axios
+        .post("/pedido/registrar", {
+          ubicacion: me.ubicacion,
+          latitud: me.latitud,
+          longitud: me.longitud,
+          idCliente: this.idCliente,
+          descripcion: this.descripcion,
+          monto: this.totalPedido,
+          data: this.arrayDetalle
+          // idUsuario: 1,
+        })
+        .then(function(response) {
+          me.listar(1, "", "productos");
+          // me.limpiarRegistro(1);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+
     agregarDetalleModal(data = []) {
       let me = this;
       if (me.encuentra(data["id"])) {
@@ -616,7 +683,8 @@ export default {
           categoria: data["categoria"],
           precio: data["precio"],
           cantidad: data["cantidad"],
-          imagen: data["imagen"]
+          imagen: data["imagen"],
+          stock:data["stock"]
         });
         me.totalPedido = me.totalPedido + data["precio"] * data["cantidad"];
         Swal.fire({
@@ -664,7 +732,7 @@ export default {
       }
     },
     login(email, password) {
-      let me = this;
+      let me = this;    
       var url = "/usuario/login?email=" + email + "&password=" + password;
       axios
         .get(url)
@@ -672,6 +740,11 @@ export default {
           let respuesta = response.data;
           me.arrayUsuario = respuesta.usuario;
           if (me.arrayUsuario.length > 0) {
+            me.cliente =
+              me.arrayUsuario[0]["nombre"] +
+              " " +
+              me.arrayUsuario[0]["apellido"];
+            me.idCliente = me.arrayUsuario[0]["id"];
             me.cerrar = "modal";
             me.errorUsuario = false;
           } else {
@@ -693,14 +766,19 @@ export default {
     atras() {
       let me = this;
       me.siguiente = 0;
+    },
+    abrirMapa() {
+      let me = this;
+      me.mapa = true;
     }
   },
   mounted() {
     // this.recargar=t;
     this.listar(1, this.buscar, this.criterio);
     this.listarCategoria();
+    this.mapa = true;
   }
 };
 
-Vue.component("v-select", vSelect);
 </script>
+  

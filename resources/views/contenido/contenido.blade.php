@@ -2,6 +2,7 @@
 @section('contenido')
     <template v-if="menu==0">
     HOLA MUNDO
+    {{-- <ubicacion></ubicacion> --}}
     </template>
 
 

@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Ubicacion extends Model
+class Ubicacione extends Model
 {
-    protected $fillable = ['localizacion','estado'];
+    protected $fillable = ['ubicacion','longitud','latitud','estado'];
     
     // public function pedido()
     // {

@@ -257,7 +257,6 @@
                     <input
                       type="number"
                       min="0"
-                      value="0"
                       v-model="detalle.cantidad"
                       class="form-control"
                     />
@@ -267,9 +266,18 @@
                   </td>
                 </tr>
                 <tr>
-                  <td colspan="6">Total</td>
+                  <td colspan="5">Total</td>
                   <td>
-                    <input type="number" value="0" readonly v-model="monto" class="form-control" />
+                   <button
+                      @click="mostrarTotal()"
+                      type="button"
+                      class="btn btn-primary btn-sm"
+                    >
+                      <i class="fa fa-spinner fa-spin"></i>
+                    </button>
+                  </td>
+                  <td>
+                    <input type="number" disabled value="0" v-model="monto" class="form-control" />
                   </td>
                 </tr>
               </tbody>
@@ -400,6 +408,7 @@ export default {
       idCliente: "",
       descripcion: "",
       producto: "",
+      stock:0,
       cantidad: 0,
       precio: 0,
       idCategoria: 0,
@@ -503,6 +512,7 @@ export default {
       me.producto = val1.producto;
       me.categoria = val1.categoria;
       me.precio = val1.precio;
+      me.stock=val1.stock;
     },
     selectCliente(search, loading) {
       let me = this;
@@ -557,7 +567,8 @@ export default {
             producto: me.producto,
             cantidad: me.cantidad,
             categoria: me.categoria,
-            precio: me.precio
+            precio: me.precio,
+            stock:me.stock
           });
           me.cantidad = 0;
         }
@@ -577,7 +588,8 @@ export default {
           producto: data["producto"],
           cantidad: 1,
           categoria: data["categoria"],
-          precio: data["precio"]
+          precio: data["precio"],
+          stock:data["stock"]
         });
       }
     },
@@ -597,6 +609,15 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
+    },
+    mostrarTotal()
+    {
+      let me = this;
+      me.monto= 0;
+      for (var i = 0; i < this.arrayDetalle.length; i++) {
+        me.monto =(this.arrayDetalle[i].cantidad  * this.arrayDetalle[i].precio)+me.monto;
+      }
+      me.monto=me.monto.toFixed(2);
     },
     registrar() {
       // if (this.validar()) {

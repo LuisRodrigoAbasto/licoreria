@@ -22,6 +22,7 @@ mix.styles([
    ],'public/css/plantilla.css')
    .styles([
     'resources/plantilla/inicio/css/bootstrap.min.css',
+    'resources/plantilla/inicio/css/btn_3d.css',
    'resources/plantilla/inicio/css/slick.css',
    'resources/plantilla/inicio/css/slick-theme.css',
    'resources/plantilla/inicio/css/nouislider.min.css',
@@ -44,6 +45,7 @@ mix.styles([
     .scripts([
         'resources/plantilla/inicio/js/jquery.min.js',
          'resources/plantilla/inicio/js/bootstrap.min.js',
+         'resources/plantilla/inicio/js/mapa.js',
          'resources/plantilla/inicio/js/slick.min.js',
          'resources/plantilla/inicio/js/nouislider.min.js',
          'resources/plantilla/inicio/js/jquery.zoom.min.js',

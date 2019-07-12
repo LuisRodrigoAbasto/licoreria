@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Pedido;
 use App\DetallePedido;
-use App\Ubicacion;
+use App\Ubicacione;
+use App\Producto;
 
 class PedidoController extends Controller
 {
@@ -41,13 +42,21 @@ class PedidoController extends Controller
 
         DB::beginTransaction();
         try{            
+
+            $ubicacione=new Ubicacione;
+            $ubicacione->ubicacion=$request->ubicacion;
+            $ubicacione->latitud=$request->latitud;
+            $ubicacione->longitud=$request->longitud;
+            $ubicacione->estado='1';
+            $ubicacione->save();
+
             $mytime= Carbon::now('America/La_Paz');
             $pedido = new Pedido();
             $pedido->idCliente = $request->idCliente;
-            $pedido->idUbicacion=$request->idUbicacion;
-            $pedido->idUsuario =$request->idUsuario;
+            $pedido->idUbicacion=$ubicacione->id;
+            // $pedido->idUsuario =$request->idUsuario;
             $pedido->fechaPedido = $mytime->toDateTimeString();
-            $pedido->fechaEntrega= $request->fechaEntrega;
+            $pedido->fechaEntrega=$mytime->toDateTimeString();
             $pedido->monto = $request->monto;
             $pedido->estado = '1';
             $pedido->save();
@@ -59,10 +68,12 @@ class PedidoController extends Controller
             {
                 $detalle = new DetallePedido();
                 $detalle->idPedido= $pedido->id;
-                $detalle->idProducto= $det['idProducto'];
+                $detalle->idProducto= $det['id'];
                 $detalle->cantidad = $det['cantidad'];   
-                $detalle->precio = $det['precioTotal']; 
+                $detalle->precio = $det['precio']*$det['cantidad']; 
                 $detalle->save();
+
+                $productos = Producto:: updateOrInsert(['id' =>$det['id']],['stock'=>$det['stock']-$det['cantidad']]);
             } 
 
             DB::commit();
