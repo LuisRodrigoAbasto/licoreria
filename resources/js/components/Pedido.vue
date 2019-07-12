@@ -26,10 +26,10 @@
     <div class="col-lg-12">
       <div class="card">
         <div class="card-header">
-          <i class="fa fa-align-justify"></i> Venta
+          <i class="fa fa-align-justify"></i> Pedido
           <button
             type="button"
-            @click="mostrarDetalle('venta','registrar')"
+            @click="mostrarDetalle('pedido','registrar')"
             class="btn btn-secondary"
           >
             <i class="icon-plus"></i>&nbsp;Nuevo
@@ -67,6 +67,7 @@
                   <th>Fecha</th>
                   <th>Monto Total</th>
                   <th>Descripcion</th>
+                  <th>Ubicacion</th>
                   <th>Estado</th>
                   <th>Opciones</th>
                 </tr>
@@ -75,9 +76,10 @@
                 <tr v-for="data in arrayData" :key="data.id">
                   <td>{{ data.id }}</td>
                   <td>{{ data.cliente }}</td>
-                  <td>{{ data.fecha }}</td>
+                  <td>{{ data.fechaPedido }}</td>
                   <td>{{ data.monto }}</td>
                   <td>{{ data.descripcion }}</td>
+                  <td>{{ data.ubicacion }}</td>
                   <td>
                     <div v-if="data.estado">
                       <span class="badge badge-success">Activo</span>
@@ -89,7 +91,7 @@
                   <td>
                     <button
                       type="button"
-                      @click="mostrarDetalle('venta','actualizar',data)"
+                      @click="mostrarDetalle('pedido','actualizar',data)"
                       class="btn btn-warning btn-sm"
                     >
                       <i class="icon-pencil"></i>
@@ -470,12 +472,12 @@ export default {
     listar(page, buscar, criterio) {
       let me = this;
       var url =
-        "/venta?page=" + page + "&buscar=" + buscar;
+        "/pedido?page=" + page + "&buscar=" + buscar;
       axios
         .get(url)
         .then(function(response) {
           var respuesta = response.data;
-          me.arrayData = respuesta.ventas.data;
+          me.arrayData = respuesta.pedidos.data;
           me.pagination = respuesta.pagination;
         })
         .catch(function(error) {
@@ -626,7 +628,7 @@ export default {
       let me = this;
 
       axios
-        .post("/venta/registrar", {
+        .post("/pedido/registrar", {
           idCliente: this.idCliente,
           descripcion: this.descripcion,
           monto: this.monto,
@@ -661,7 +663,7 @@ export default {
       }
       let me = this;
       axios
-        .put("/venta/actualizar", {
+        .put("/pedido/actualizar", {
           idCliente: this.idCliente,
           descripcion: this.descripcion,
           monto: this.monto
@@ -701,7 +703,7 @@ export default {
             let me = this;
 
             axios
-              .put("/venta/desactivar", {
+              .put("/pedido/desactivar", {
                 id: id
               })
               .then(function(response) {
@@ -751,7 +753,7 @@ export default {
             let me = this;
 
             axios
-              .put("/venta/activar", {
+              .put("/pedido/activar", {
                 id: id
               })
               .then(function(response) {
@@ -802,7 +804,7 @@ export default {
     },
     mostrarDetalle(modelo, accion, data = []) {
       switch (modelo) {
-        case "venta": {
+        case "pedido": {
           switch (accion) {
             case "registrar": {
               this.limpiarRegistro(0);
@@ -823,7 +825,7 @@ export default {
               };
 
               let me = this;
-              var url = "/venta/listarVentas?id=" + data["id"];
+              var url = "/pedido7listarPedidos?id=" + data["id"];
               axios
                 .get(url)
                 .then(function(response) {

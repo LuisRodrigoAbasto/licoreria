@@ -25,11 +25,11 @@
             </li>
             <li class="nav-item nav-dropdown">
               <a class="nav-link nav-dropdown-toggle" >
-                <i class="nav-icon icon-cursor"></i> Ventas</a>
+                  <i class="nav-icon icon-basket-loaded"></i> Ventas</a>
               <ul class="nav-dropdown-items">
                 <li class="nav-item" @click="menu=3">
                   <a class="nav-link" ref="#"  >
-                    <i class="nav-icon icon-cursor"></i> Venta</a>
+                    <i class="nav-icon icon-basket-loaded"></i> Venta</a>
                 </li>
                 <li class="nav-item" @click="menu=4">
                   <a class="nav-link" ref="#"  >
@@ -38,57 +38,13 @@
                
               </ul>
             </li>
-            <li class="nav-item" @click="menu=6">
+            <li class="nav-item" @click="menu=5">
               <a class="nav-link"  ref="#" >
-                <i class="nav-icon icon-pie-chart"></i> Charts</a>
+                <i class="nav-icon icon-location-pin"></i>Pedido</a>
             </li>
-            <li class="nav-item nav-dropdown">
-              <a class="nav-link nav-dropdown-toggle" >
-                <i class="nav-icon icon-star"></i> Icons</a>
-              <ul class="nav-dropdown-items">
-                <li class="nav-item">
-                  <a class="nav-link" href="icons/coreui-icons.html">
-                    <i class="nav-icon icon-star"></i> CoreUI Icons
-                    <span class="badge badge-success">NEW</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    <i class="nav-icon icon-star"></i> Flags</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    <i class="nav-icon icon-star"></i> Font Awesome
-                    <span class="badge badge-secondary">4.7</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">
-                    <i class="nav-icon icon-star"></i> Simple Line Icons</a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item nav-dropdown">
-              <a class="nav-link nav-dropdown-toggle" >
-                <i class="nav-icon icon-bell"></i> Notifications</a>
-              <ul class="nav-dropdown-items">
-                <li class="nav-item">
-                  <a class="nav-link" href="notifications/alerts.html">
-                    <i class="nav-icon icon-bell"></i> Alerts</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="notifications/badge.html">
-                    <i class="nav-icon icon-bell"></i> Badge</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="notifications/modals.html">
-                    <i class="nav-icon icon-bell"></i> Modals</a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="widgets.html">
-                <i class="nav-icon icon-calculator"></i> Widgets
+            <li class="nav-item" @click="menu=6">
+              <a class="nav-link" href="#">
+                <i class="nav-icon icon-calculator"></i> Usuarios
                 <span class="badge badge-primary">NEW</span>
               </a>
             </li>
@@ -96,33 +52,21 @@
             <li class="nav-title">Extras</li>
             <li class="nav-item nav-dropdown">
               <a class="nav-link nav-dropdown-toggle" >
-                <i class="nav-icon icon-star"></i> Pages</a>
+                <i class="nav-icon icon-star"></i> Paginas</a>
               <ul class="nav-dropdown-items">
                 <li class="nav-item">
-                  <a class="nav-link" href="login.html" target="_top">
-                    <i class="nav-icon icon-star"></i> Login</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="register.html" target="_top">
-                    <i class="nav-icon icon-star"></i> Register</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="404.html" target="_top">
-                    <i class="nav-icon icon-star"></i> Error 404</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="500.html" target="_top">
-                    <i class="nav-icon icon-star"></i> Error 500</a>
+                  <a class="nav-link" href="/" target="_top">
+                    <i class="nav-icon icon-star"></i> Licoreria</a>
                 </li>
               </ul>
             </li>
             <li class="nav-item mt-auto">
-              <a class="nav-link nav-link-success" href="https://coreui.io" target="_top">
-                <i class="nav-icon icon-cloud-download"></i> Download CoreUI</a>
+              <a class="nav-link nav-link-success" href="/" target="_top">
+                <i class="nav-icon icon-cloud-download"></i> Licoreria</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link nav-link-danger" href="https://coreui.io/pro/" target="_top">
-                <i class="nav-icon icon-layers"></i> Try CoreUI
+              <a class="nav-link nav-link-danger" href="/" target="_top">
+                <i class="nav-icon icon-layers"></i> Tecnologia Web
                 <strong>PRO</strong>
               </a>
             </li>

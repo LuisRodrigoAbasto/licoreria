@@ -18,7 +18,6 @@ class PedidoController extends Controller
 
         $buscar = $request->buscar;
         $criterio = $request->criterio;
-
         $pedidos= Pedido::where('estado','=','1')->orderBy('pedidos.id','desc')->paginate(10);
 
         return [

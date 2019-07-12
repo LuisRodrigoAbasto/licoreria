@@ -99,17 +99,7 @@
             <!-- ACCOUNT -->
             <div class="col-md-3 clearfix">
               <div class="header-ctn">
-                <!-- Wishlist -->
-                <!-- <div>
-								<a href="#">
-									<i class="fa fa-heart-o"></i>
-									<span >Your Wishlist</span>
-									<div class="qty">2</div>
-								</a>
-                </div>-->
-                <!-- /Wishlist -->
 
-                <!-- Cart -->
                 <div class="dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                     <i class="fa fa-shopping-cart"></i>
@@ -140,16 +130,6 @@
                         </button>
                       </div>
 
-                      <!-- <div class="product-widget">
-											<div class="product-img">
-												<img :src="'img/product02.png'" alt="">
-											</div>
-											<div class="product-body">
-												<h3 class="product-name"><a href="#">product name goes here</a></h3>
-												<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-											</div>
-											<button class="delete"><i class="fa fa-close"></i></button>
-                      </div>-->
                     </div>
                     <div class="cart-summary">
                       <small>{{ arrayDetalle.length }} productos marcados</small>
@@ -297,11 +277,11 @@
         <div class="container">
           <!-- row -->
           <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-6">
               <!-- Billing Details -->
               <div class="billing-details">
                 <div class="section-title">
-                  <h3 class="title">Billing address</h3>
+                  <h3 class="title">Datos y Ubicacion</h3>
                 </div>
                 <div class="form-group">
                   <label class="col-md-3 form-control-label" for="text-input">NOMBRE</label>
@@ -351,7 +331,7 @@
               <!-- /Order notes -->
             </div>
             <!-- Order Details -->
-            <div class="col-md-5 order-details">
+            <div class="col-md-6 order-details">
               <div class="section-title text-center">
                 <h3 class="title">Su Orden</h3>
               </div>
@@ -410,44 +390,13 @@
                   </div>
                 </div>
               </div>
-              <div class="payment-method">
-                <div class="input-radio">
-                  <input type="radio" name="payment" id="payment-1" />
-                  <label for="payment-1">
-                    <span></span>
-                    Direct Bank Transfer
-                  </label>
-                  <div class="caption">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                  </div>
-                </div>
-                <div class="input-radio">
-                  <input type="radio" name="payment" id="payment-2" />
-                  <label for="payment-2">
-                    <span></span>
-                    Cheque Payment
-                  </label>
-                  <div class="caption">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                  </div>
-                </div>
-                <div class="input-radio">
-                  <input type="radio" name="payment" id="payment-3" />
-                  <label for="payment-3">
-                    <span></span>
-                    Paypal System
-                  </label>
-                  <div class="caption">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                  </div>
-                </div>
-              </div>
+      
               <div class="input-checkbox">
                 <input type="checkbox" id="terms" />
                 <label for="terms">
                   <span></span>
-                  I've read and accept the
-                  <a href="#">terms & conditions</a>
+                  He Leido y Acepto Los
+                  <a href="#">Terminos & Condiciones</a>
                 </label>
               </div>
               <a href="#" class="primary-btn order-submit" @click="registrarPedido()">Place order</a>
