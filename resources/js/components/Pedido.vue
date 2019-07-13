@@ -66,7 +66,6 @@
                   <th>Cliente</th>
                   <th>Fecha</th>
                   <th>Monto Total</th>
-                  <th>Descripcion</th>
                   <th>Ubicacion</th>
                   <th>Estado</th>
                   <th>Opciones</th>
@@ -78,8 +77,17 @@
                   <td>{{ data.cliente }}</td>
                   <td>{{ data.fechaPedido }}</td>
                   <td>{{ data.monto }}</td>
-                  <td>{{ data.descripcion }}</td>
-                  <td>{{ data.ubicacion }}</td>
+                  <td>
+                    <button
+                      type="button"
+                      data-toggle="modal"
+                    data-target="#ModalMapa"
+                      @click="mostrarMapa(data.latitud,data.longitud)"
+                      class="btn btn-success form-control"
+                    >
+                      <i class="icon-check"></i>
+                    </button>
+                  </td>
                   <td>
                     <div v-if="data.estado">
                       <span class="badge badge-success">Activo</span>
@@ -94,19 +102,19 @@
                       @click="mostrarDetalle('pedido','actualizar',data)"
                       class="btn btn-warning btn-sm"
                     >
-                      <i class="icon-pencil"></i>
+                      <i class="icon-check"></i>
                     </button> &nbsp;
                     <template v-if="data.estado">
                       <button
                         type="button"
-                        class="btn btn-danger btn-sn"
+                        class="btn btn-danger btn-sm"
                         @click="desactivar(data.id)"
                       >
                         <i class="icon-trash"></i>
                       </button>
                     </template>
                     <template v-else>
-                      <button type="button" class="btn btn-info btn-sn" @click="activar(data.id)">
+                      <button type="button" class="btn btn-info btn-sm" @click="activar(data.id)">
                         <i class="icon-check"></i>
                       </button>
                     </template>
@@ -256,12 +264,7 @@
                   <td>{{ detalle.categoria }}</td>
                   <td>{{ detalle.precio }}</td>
                   <td>
-                    <input
-                      type="number"
-                      min="0"
-                      v-model="detalle.cantidad"
-                      class="form-control"
-                    />
+                    <input type="number" min="0" v-model="detalle.cantidad" class="form-control" />
                   </td>
                   <td>
                     <span v-text="(detalle.cantidad*detalle.precio).toFixed(2)"></span>
@@ -270,11 +273,7 @@
                 <tr>
                   <td colspan="5">Total</td>
                   <td>
-                   <button
-                      @click="mostrarTotal()"
-                      type="button"
-                      class="btn btn-primary btn-sm"
-                    >
+                    <button @click="mostrarTotal()" type="button" class="btn btn-primary btn-sm">
                       <i class="fa fa-spinner fa-spin"></i>
                     </button>
                   </td>
@@ -394,6 +393,54 @@
         </div>
       </div>
     </div>
+
+    <!-- MAPA -->
+    <div
+      class="modal fade bd-example-modal-lg"
+      tabindex="-1"
+      id="ModalMapa"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-primary modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle" v-text="tituloModal"></h5>
+            <button
+              type="button"
+              class="close"
+              @click="cerrarModal()"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div>
+              <gmap-map :center="center" :zoom="8" style="width:100%;  height: 400px;">
+                <gmap-marker
+                  :key="index"
+                  v-for="(m, index) in markers"
+                  :position="m.position"
+                  @click="center=m.position"
+                ></gmap-marker>
+              </gmap-map>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+            <!-- <button
+              class="btn btn-primary"
+              type="button"
+              data-dismiss="modal"
+              @click="agregarUbicacion()"
+            >Aceptar</button>-->
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
 </template>
 <script>
@@ -401,6 +448,15 @@ import Vue from "vue";
 import vSelect from "vue-select";
 
 import "vue-select/dist/vue-select.css";
+
+import * as VueGoogleMaps from "vue2-google-maps";
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: "AIzaSyCgwFQtMtDvqg2Bgs8qEbqnOidRUL8sPgc",
+    libraries: "places" // necessary for places input
+  }
+});
+
 
 Vue.component("v-select", vSelect);
 export default {
@@ -410,7 +466,7 @@ export default {
       idCliente: "",
       descripcion: "",
       producto: "",
-      stock:0,
+      stock: 0,
       cantidad: 0,
       precio: 0,
       idCategoria: 0,
@@ -435,12 +491,20 @@ export default {
         from: 0,
         to: 0
       },
-      selectedCliente:null,
+      selectedCliente: null,
       offset: 3,
       criterio: "cliente",
       buscar: "",
       buscarP: "",
-      criterioP: "productos"
+      criterioP: "productos",
+       center: { lat:-17.3436487, lng: -63.2544467 },
+      markers: [
+        {
+           position: { lat:-17.3436487, lng: -63.2544467 }
+        }
+      ],
+      places: [],
+      currentPlace: null
     };
   },
   computed: {
@@ -469,10 +533,67 @@ export default {
     }
   },
   methods: {
+
+////MAPAS
+    setPlace(place) {
+      this.currentPlace = place;
+    },
+    addMarker() {
+      if (this.currentPlace) {
+        const marker = {
+          lat: this.currentPlace.geometry.location.lat(),
+          lng: this.currentPlace.geometry.location.lng()
+        };
+        this.markers.push({ position: marker });
+        this.places.push(this.currentPlace);
+        this.center = marker;
+        this.currentPlace = null;
+      }
+    },
+    geolocate: function() {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+      });
+    },
+    mapaUbicado() {
+      this.markers = [
+        {
+          position: { lat:-17.3436487, lng: -63.2544467 }
+        }
+      ];
+      this.markers.push({ position: this.center });
+    },
+    abrirMapa() {
+      this.geolocate();
+      this.mapaUbicado();
+    },
+    mostrarMapa(latitud,longitud) {
+      this.markers = [
+        {
+          position: { lat:-17.3436487, lng: -63.2544467 }
+        },
+        {
+           position: { lat:latitud, lng:longitud }
+        }
+      ];
+     
+    },
+    agregarUbicacion()
+    {
+      this.latitud=this.markers[1].position.lat;
+      this.longitud=this.markers[1].position.lng;
+      this.ubicacion=this.latitud+','+this.longitud;
+    },
+
+    ///// MAPAS
+
+
     listar(page, buscar, criterio) {
       let me = this;
-      var url =
-        "/pedido?page=" + page + "&buscar=" + buscar;
+      var url = "/pedido?page=" + page + "&buscar=" + buscar;
       axios
         .get(url)
         .then(function(response) {
@@ -514,7 +635,7 @@ export default {
       me.producto = val1.producto;
       me.categoria = val1.categoria;
       me.precio = val1.precio;
-      me.stock=val1.stock;
+      me.stock = val1.stock;
     },
     selectCliente(search, loading) {
       let me = this;
@@ -557,12 +678,12 @@ export default {
       } else {
         if (me.encuentra(me.idProducto)) {
           Swal.fire({
-              position: "center",
-              type: "El Producto ya se Encuentra Agregado",
-              title: "Error",
-              showConfirmButton: false,
-              timer: 1000
-            });
+            position: "center",
+            type: "El Producto ya se Encuentra Agregado",
+            title: "Error",
+            showConfirmButton: false,
+            timer: 1000
+          });
         } else {
           me.arrayDetalle.push({
             id: me.idProducto,
@@ -570,7 +691,7 @@ export default {
             cantidad: me.cantidad,
             categoria: me.categoria,
             precio: me.precio,
-            stock:me.stock
+            stock: me.stock
           });
           me.cantidad = 0;
         }
@@ -591,7 +712,7 @@ export default {
           cantidad: 1,
           categoria: data["categoria"],
           precio: data["precio"],
-          stock:data["stock"]
+          stock: data["stock"]
         });
       }
     },
@@ -612,14 +733,15 @@ export default {
           console.log(error);
         });
     },
-    mostrarTotal()
-    {
+    mostrarTotal() {
       let me = this;
-      me.monto= 0;
+      me.monto = 0;
       for (var i = 0; i < this.arrayDetalle.length; i++) {
-        me.monto =(this.arrayDetalle[i].cantidad  * this.arrayDetalle[i].precio)+me.monto;
+        me.monto =
+          this.arrayDetalle[i].cantidad * this.arrayDetalle[i].precio +
+          me.monto;
       }
-      me.monto=me.monto.toFixed(2);
+      me.monto = me.monto.toFixed(2);
     },
     registrar() {
       if (this.validar()) {
@@ -632,7 +754,7 @@ export default {
           idCliente: this.idCliente,
           descripcion: this.descripcion,
           monto: this.monto,
-          data:this.arrayDetalle
+          data: this.arrayDetalle
           // idUsuario: 1,
         })
         .then(function(response) {
@@ -655,7 +777,7 @@ export default {
       me.producto = "";
       me.categoria = "";
       me.idCategoria = 0;
-      me.selectedCliente=null;
+      me.selectedCliente = null;
     },
     actualizar() {
       if (this.validar()) {
@@ -676,7 +798,6 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
-        
     },
 
     desactivar(id) {
@@ -787,8 +908,7 @@ export default {
         this.errorMostrarMsj.push("Ingrese el Nombre del Producto");
       if (this.arrayDetalle.length)
         this.errorMostrarMsj.push("No tiene Ningun Producto");
-        if(this.monto)
-        this.errorMostrarMsj.push("Calcule el Precio Total")
+      if (this.monto) this.errorMostrarMsj.push("Calcule el Precio Total");
       if (this.errorMostrarMsj.length) this.errorMostrar = 1;
       return this.errorMostrar;
     },

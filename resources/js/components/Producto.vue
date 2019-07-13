@@ -104,14 +104,14 @@
                   <template v-if="data.estado">
                     <button
                       type="button"
-                      class="btn btn-danger btn-sn"
+                      class="btn btn-danger btn-sm"
                       @click="desactivar(data.id)"
                     >
                       <i class="icon-trash"></i>
                     </button>
                   </template>
                   <template v-else>
-                    <button type="button" class="btn btn-info btn-sn" @click="activar(data.id)">
+                    <button type="button" class="btn btn-info btn-sm" @click="activar(data.id)">
                       <i class="icon-check"></i>
                     </button>
                   </template>

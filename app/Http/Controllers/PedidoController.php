@@ -14,11 +14,15 @@ class PedidoController extends Controller
 {
     public function index(Request $request)
     {
-        if(!$request->ajax()) return redirect('/');
+        // if(!$request->ajax()) return redirect('/');
 
         $buscar = $request->buscar;
         $criterio = $request->criterio;
-        $pedidos= Pedido::where('estado','=','1')->orderBy('pedidos.id','desc')->paginate(10);
+        $pedidos= Pedido::join('usuarios','pedidos.idCliente','=','usuarios.id')
+        ->join('ubicaciones','pedidos.idUbicacion','=','ubicaciones.id')
+        ->select('pedidos.id','pedidos.idCliente',DB::raw("concat(usuarios.nombre,' ',usuarios.apellido) as cliente"),'pedidos.idUbicacion',
+        'ubicaciones.latitud','ubicaciones.longitud','fechaPedido','pedidos.monto')
+        ->where('pedidos.estado','=','1')->orderBy('pedidos.id','desc')->paginate(10);
 
         return [
             'pagination' => [

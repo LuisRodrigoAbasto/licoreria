@@ -2903,6 +2903,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_select__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_select__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-select/dist/vue-select.css */ "./node_modules/vue-select/dist/vue-select.css");
 /* harmony import */ var vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vue_select_dist_vue_select_css__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var vue2_google_maps__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue2-google-maps */ "./node_modules/vue2-google-maps/dist/main.js");
+/* harmony import */ var vue2_google_maps__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue2_google_maps__WEBPACK_IMPORTED_MODULE_3__);
 var _methods;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -3305,9 +3307,64 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue2_google_maps__WEBPACK_IMPORTED_MODULE_3__, {
+  load: {
+    key: "AIzaSyCgwFQtMtDvqg2Bgs8qEbqnOidRUL8sPgc",
+    libraries: "places" // necessary for places input
+
+  }
+});
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component("v-select", vue_select__WEBPACK_IMPORTED_MODULE_1___default.a);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3346,7 +3403,19 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component("v-select", vue_select__WEB
       criterio: "cliente",
       buscar: "",
       buscarP: "",
-      criterioP: "productos"
+      criterioP: "productos",
+      center: {
+        lat: -17.3436487,
+        lng: -63.2544467
+      },
+      markers: [{
+        position: {
+          lat: -17.3436487,
+          lng: -63.2544467
+        }
+      }],
+      places: [],
+      currentPlace: null
     };
   },
   computed: {
@@ -3381,6 +3450,68 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component("v-select", vue_select__WEB
     }
   },
   methods: (_methods = {
+    ////MAPAS
+    setPlace: function setPlace(place) {
+      this.currentPlace = place;
+    },
+    addMarker: function addMarker() {
+      if (this.currentPlace) {
+        var marker = {
+          lat: this.currentPlace.geometry.location.lat(),
+          lng: this.currentPlace.geometry.location.lng()
+        };
+        this.markers.push({
+          position: marker
+        });
+        this.places.push(this.currentPlace);
+        this.center = marker;
+        this.currentPlace = null;
+      }
+    },
+    geolocate: function geolocate() {
+      var _this = this;
+
+      navigator.geolocation.getCurrentPosition(function (position) {
+        _this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+      });
+    },
+    mapaUbicado: function mapaUbicado() {
+      this.markers = [{
+        position: {
+          lat: -17.3436487,
+          lng: -63.2544467
+        }
+      }];
+      this.markers.push({
+        position: this.center
+      });
+    },
+    abrirMapa: function abrirMapa() {
+      this.geolocate();
+      this.mapaUbicado();
+    },
+    mostrarMapa: function mostrarMapa(latitud, longitud) {
+      this.markers = [{
+        position: {
+          lat: -17.3436487,
+          lng: -63.2544467
+        }
+      }, {
+        position: {
+          lat: latitud,
+          lng: longitud
+        }
+      }];
+    },
+    agregarUbicacion: function agregarUbicacion() {
+      this.latitud = this.markers[1].position.lat;
+      this.longitud = this.markers[1].position.lng;
+      this.ubicacion = this.latitud + ',' + this.longitud;
+    },
+    ///// MAPAS
     listar: function listar(page, buscar, criterio) {
       var me = this;
       var url = "/pedido?page=" + page + "&buscar=" + buscar;
@@ -3577,7 +3708,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component("v-select", vue_select__WEB
       });
     },
     desactivar: function desactivar(id) {
-      var _this = this;
+      var _this2 = this;
 
       var swalWithBootstrapButtons = Swal.mixin({
         customClass: {
@@ -3596,7 +3727,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component("v-select", vue_select__WEB
         reverseButtons: true
       }).then(function (result) {
         if (result.value) {
-          var me = _this;
+          var me = _this2;
           axios.put("/pedido/desactivar", {
             id: id
           }).then(function (response) {
@@ -3623,7 +3754,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component("v-select", vue_select__WEB
       });
     },
     activar: function activar(id) {
-      var _this2 = this;
+      var _this3 = this;
 
       var swalWithBootstrapButtons = Swal.mixin({
         customClass: {
@@ -3642,7 +3773,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.component("v-select", vue_select__WEB
         reverseButtons: true
       }).then(function (result) {
         if (result.value) {
-          var me = _this2;
+          var me = _this3;
           axios.put("/pedido/activar", {
             id: id
           }).then(function (response) {
@@ -4327,9 +4458,6 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue2_google_maps__WEBPACK_IMPORTE
     };
   },
   computed: {
-    coorde: function coorde() {
-      return window.pedido;
-    },
     isActived: function isActived() {
       return this.pagination.current_page;
     },
@@ -27796,7 +27924,7 @@ var render = function() {
                               _c(
                                 "button",
                                 {
-                                  staticClass: "btn btn-danger btn-sn",
+                                  staticClass: "btn btn-danger btn-sm",
                                   attrs: { type: "button" },
                                   on: {
                                     click: function($event) {
@@ -27811,7 +27939,7 @@ var render = function() {
                               _c(
                                 "button",
                                 {
-                                  staticClass: "btn btn-info btn-sn",
+                                  staticClass: "btn btn-info btn-sm",
                                   attrs: { type: "button" },
                                   on: {
                                     click: function($event) {
@@ -28376,7 +28504,7 @@ var render = function() {
                               _c(
                                 "button",
                                 {
-                                  staticClass: "btn btn-danger btn-sn",
+                                  staticClass: "btn btn-danger btn-sm",
                                   attrs: { type: "button" },
                                   on: {
                                     click: function($event) {
@@ -28391,7 +28519,7 @@ var render = function() {
                               _c(
                                 "button",
                                 {
-                                  staticClass: "btn btn-info btn-sn",
+                                  staticClass: "btn btn-info btn-sm",
                                   attrs: { type: "button" },
                                   on: {
                                     click: function($event) {
@@ -29449,9 +29577,28 @@ var render = function() {
                             _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(data.monto))]),
                             _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(data.descripcion))]),
-                            _vm._v(" "),
-                            _c("td", [_vm._v(_vm._s(data.ubicacion))]),
+                            _c("td", [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-success form-control",
+                                  attrs: {
+                                    type: "button",
+                                    "data-toggle": "modal",
+                                    "data-target": "#ModalMapa"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.mostrarMapa(
+                                        data.latitud,
+                                        data.longitud
+                                      )
+                                    }
+                                  }
+                                },
+                                [_c("i", { staticClass: "icon-check" })]
+                              )
+                            ]),
                             _vm._v(" "),
                             _c("td", [
                               data.estado
@@ -29489,7 +29636,7 @@ var render = function() {
                                       }
                                     }
                                   },
-                                  [_c("i", { staticClass: "icon-pencil" })]
+                                  [_c("i", { staticClass: "icon-check" })]
                                 ),
                                 _vm._v("  \n                  "),
                                 data.estado
@@ -29497,7 +29644,7 @@ var render = function() {
                                       _c(
                                         "button",
                                         {
-                                          staticClass: "btn btn-danger btn-sn",
+                                          staticClass: "btn btn-danger btn-sm",
                                           attrs: { type: "button" },
                                           on: {
                                             click: function($event) {
@@ -29512,7 +29659,7 @@ var render = function() {
                                       _c(
                                         "button",
                                         {
-                                          staticClass: "btn btn-info btn-sn",
+                                          staticClass: "btn btn-info btn-sm",
                                           attrs: { type: "button" },
                                           on: {
                                             click: function($event) {
@@ -30243,6 +30390,92 @@ var render = function() {
           ]
         )
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade bd-example-modal-lg",
+        attrs: {
+          tabindex: "-1",
+          id: "ModalMapa",
+          role: "dialog",
+          "aria-labelledby": "myModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-primary modal-lg",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c("h5", {
+                  staticClass: "modal-title",
+                  attrs: { id: "exampleModalLongTitle" },
+                  domProps: { textContent: _vm._s(_vm.tituloModal) }
+                }),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    },
+                    on: {
+                      click: function($event) {
+                        return _vm.cerrarModal()
+                      }
+                    }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c(
+                  "div",
+                  [
+                    _c(
+                      "gmap-map",
+                      {
+                        staticStyle: { width: "100%", height: "400px" },
+                        attrs: { center: _vm.center, zoom: 8 }
+                      },
+                      _vm._l(_vm.markers, function(m, index) {
+                        return _c("gmap-marker", {
+                          key: index,
+                          attrs: { position: m.position },
+                          on: {
+                            click: function($event) {
+                              _vm.center = m.position
+                            }
+                          }
+                        })
+                      }),
+                      1
+                    )
+                  ],
+                  1
+                )
+              ]),
+              _vm._v(" "),
+              _vm._m(6)
+            ])
+          ]
+        )
+      ]
     )
   ])
 }
@@ -30301,8 +30534,6 @@ var staticRenderFns = [
         _c("th", [_vm._v("Fecha")]),
         _vm._v(" "),
         _c("th", [_vm._v("Monto Total")]),
-        _vm._v(" "),
-        _c("th", [_vm._v("Descripcion")]),
         _vm._v(" "),
         _c("th", [_vm._v("Ubicacion")]),
         _vm._v(" "),
@@ -30369,6 +30600,21 @@ var staticRenderFns = [
         _vm._v(" "),
         _c("th", [_vm._v("precio")])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Cerrar")]
+      )
     ])
   }
 ]
@@ -31374,7 +31620,7 @@ var render = function() {
           _c(
             "div",
             {
-              staticClass: "modal-dialog modal-lg",
+              staticClass: "modal-dialog modal-primary modal-lg",
               attrs: { role: "document" }
             },
             [
@@ -31845,7 +32091,7 @@ var render = function() {
                               _c(
                                 "button",
                                 {
-                                  staticClass: "btn btn-danger btn-sn",
+                                  staticClass: "btn btn-danger btn-sm",
                                   attrs: { type: "button" },
                                   on: {
                                     click: function($event) {
@@ -31860,7 +32106,7 @@ var render = function() {
                               _c(
                                 "button",
                                 {
-                                  staticClass: "btn btn-info btn-sn",
+                                  staticClass: "btn btn-info btn-sm",
                                   attrs: { type: "button" },
                                   on: {
                                     click: function($event) {
@@ -32689,7 +32935,7 @@ var render = function() {
                                       _c(
                                         "button",
                                         {
-                                          staticClass: "btn btn-danger btn-sn",
+                                          staticClass: "btn btn-danger btn-sm",
                                           attrs: { type: "button" },
                                           on: {
                                             click: function($event) {
@@ -32704,7 +32950,7 @@ var render = function() {
                                       _c(
                                         "button",
                                         {
-                                          staticClass: "btn btn-info btn-sn",
+                                          staticClass: "btn btn-info btn-sm",
                                           attrs: { type: "button" },
                                           on: {
                                             click: function($event) {
