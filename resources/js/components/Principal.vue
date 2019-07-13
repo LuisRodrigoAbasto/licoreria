@@ -99,7 +99,6 @@
             <!-- ACCOUNT -->
             <div class="col-md-3 clearfix">
               <div class="header-ctn">
-
                 <div class="dropdown">
                   <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                     <i class="fa fa-shopping-cart"></i>
@@ -129,7 +128,6 @@
                           <i class="fa fa-close"></i>
                         </button>
                       </div>
-
                     </div>
                     <div class="cart-summary">
                       <small>{{ arrayDetalle.length }} productos marcados</small>
@@ -286,48 +284,34 @@
                 <div class="form-group">
                   <label class="col-md-3 form-control-label" for="text-input">NOMBRE</label>
                   <input
-                    class="input"
+                    class="form-control"
                     type="text"
                     name="first-name"
                     v-model="cliente"
-                    
                     placeholder="First Name"
-                  >
-                
-                </div>Ubicacion
-                <input type="text" class="form-control" id="coords" name="coordenada" :ubicacion="'{{ $ubicacion }}'" >
-                <!-- <label id="ubicacion" ref="ubi"></label> -->
-                <label for="ubicacion">{{ ubicacion }}</label>
-                <br />Longitud
-                <input
-                  class="xy form-control"
-                  type="text"
-                  id="longitud"
-                >
-                <!-- <label  class="xy"
-                  id="longitud"
-                  ref="long" ></label> -->
-                <br />Latidud
-                <!-- <label class="xy" id="latitud"   ref="lat"></label> -->
-                <input class="xy form-control" type="text" id="latitud">
-                <div class="form-group">
-                  <input
-                    class="input"
-                    type="submit"
-                    placeholder="Ubicacion"
-                    @click="abrirMapa()"
-                    value="Ubicacion"
-                    data-toggle="modal"
-                    data-target="#maps"
                   />
-                  <input class="input" type="text" placeholder="Ubicacion" />
+                </div>Ubicacion
+                <input type="text" class="form-control" v-model="ubicacion" />
+                <br />Latitud
+                <input class="form form-control" type="text" v-model="latitud" />
+                <br />Longitud
+                <input class="form-control" type="text" v-model="longitud" />
+                <br />
+                <div class="form-group">
+                  <button
+                    class="btn btn-primary mb-1"
+                    type="button"
+                    data-toggle="modal"
+                    data-target="#largeModal"
+                    @click="abrirMapa()"
+                  >Ubicacion</button>
                   <!-- <label class="custom-file-label" for="customFileLang">Ubicacion</label> -->
                 </div>
               </div>
-
+              <!-- 
               <div class="order-notes">
-                <textarea class="input" placeholder="Order Notes"></textarea>
-              </div>
+                <textarea class="input" placeholder="Nota Para la Orden"></textarea>
+              </div>-->
               <!-- /Order notes -->
             </div>
             <!-- Order Details -->
@@ -390,7 +374,7 @@
                   </div>
                 </div>
               </div>
-      
+
               <div class="input-checkbox">
                 <input type="checkbox" id="terms" />
                 <label for="terms">
@@ -399,7 +383,9 @@
                   <a href="#">Terminos & Condiciones</a>
                 </label>
               </div>
-              <a href="#" class="primary-btn order-submit" @click="registrarPedido()">Place order</a>
+              
+               <a href="#" class="primary-btn order-submit"  data-toggle="modal" data-target="#loginModal" v-if="idCliente==0">Loguearse</a>
+              <a href="#" class="primary-btn order-submit" @click="registrarPedido()" v-else>Ordenar Pedido</a>
             </div>
             <!-- /Order Details -->
           </div>
@@ -462,23 +448,67 @@
         </div>
       </div>
     </div>
+
+    <div
+      class="modal fade"
+      id="largeModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Ubicacion</h4>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div>
+              <gmap-map :center="center" :zoom="8" style="width:100%;  height: 400px;">
+                <gmap-marker
+                  :key="index"
+                  v-for="(m, index) in markers"
+                  :position="m.position"
+                  @click="center=m.position"
+                ></gmap-marker>
+              </gmap-map>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+            <button
+              class="btn btn-primary"
+              type="button"
+              data-dismiss="modal"
+              @click="agregarUbicacion()"
+            >Aceptar</button>
+          </div>
+        </div>
+        <!-- /.modal-content-->
+      </div>
+      <!-- /.modal-dialog-->
+    </div>
   </div>
 </template>
-
-
+ 
 <script>
 import Vue from "vue";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
-import { get } from 'http';
-// import * as VueGoogleMaps from "vue2-google-maps";
-// Vue.use(VueGoogleMaps,{
-//     load:{
-//         key: "YOUR_API_TOKEN"
-//     }
-// });
+
+import * as VueGoogleMaps from "vue2-google-maps";
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: "AIzaSyCgwFQtMtDvqg2Bgs8qEbqnOidRUL8sPgc",
+    libraries: "places" // necessary for places input
+  }
+});
 
 export default {
+  name: "GoogleMap",
   data() {
     return {
       idCategoria: 0,
@@ -509,16 +539,26 @@ export default {
       cerrar: "",
       errorUsuario: false,
       idCliente: 0,
-      cliente: 0,
+      cliente: "",
       siguiente: 0,
-      ubicacion:0,
-      latitud:0,
-      longitud:0,
-      stock:0
+      ubicacion:'',
+      latitud: 0,
+      longitud: 0,
+      stock: 0,
+      center: { lat:-17.3436487, lng: -63.2544467 },
+      markers: [
+        {
+           position: { lat:-17.3436487, lng: -63.2544467 }
+        }
+      ],
+      places: [],
+      currentPlace: null
     };
   },
   computed: {
-    coorde:function(){ return window.pedido;},
+    coorde: function() {
+      return window.pedido;
+    },
     isActived: function() {
       return this.pagination.current_page;
     },
@@ -544,6 +584,51 @@ export default {
     }
   },
   methods: {
+    ////MAPAS
+    setPlace(place) {
+      this.currentPlace = place;
+    },
+    addMarker() {
+      if (this.currentPlace) {
+        const marker = {
+          lat: this.currentPlace.geometry.location.lat(),
+          lng: this.currentPlace.geometry.location.lng()
+        };
+        this.markers.push({ position: marker });
+        this.places.push(this.currentPlace);
+        this.center = marker;
+        this.currentPlace = null;
+      }
+    },
+    geolocate: function() {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+      });
+    },
+    mapaUbicado() {
+      this.markers = [
+        {
+          position: { lat:-17.3436487, lng: -63.2544467 }
+        }
+      ];
+      this.markers.push({ position: this.center });
+    },
+    abrirMapa() {
+      this.geolocate();
+      this.mapaUbicado();
+    },
+    agregarUbicacion()
+    {
+      this.latitud=this.markers[1].position.lat;
+      this.longitud=this.markers[1].position.lng;
+      this.ubicacion=this.latitud+','+this.longitud;
+    },
+
+    ///// MAPAS
+
     listar(page, buscar, criterio) {
       let me = this;
       var url =
@@ -584,31 +669,27 @@ export default {
           console.log(error);
         });
     },
-  cambiarDato(ubicacion,latitud,longitud)
-  {
-    let me=this;
-        // me.ubicacion= ubicacion;
-        // me.latitud= latitud;
-        // me.longitud= longitud;
-        me.ubicacion=function(){ window.serverData;}
-  },
+
     registrarPedido() {
       let me = this;
-    // this.cambiarDato();
       axios
         .post("/pedido/registrar", {
-          ubicacion: me.ubicacion,
           latitud: me.latitud,
           longitud: me.longitud,
           idCliente: this.idCliente,
-          descripcion: this.descripcion,
           monto: this.totalPedido,
           data: this.arrayDetalle
-          // idUsuario: 1,
         })
         .then(function(response) {
+        Swal.fire({
+          position: "center",
+          type: "success",
+          title: "Su Pedido esta Siendo Procesado",
+          showConfirmButton: false,
+          timer: 1500
+        });
           me.listar(1, "", "productos");
-          // me.limpiarRegistro(1);
+          me.atras();
         })
         .catch(function(error) {
           console.log(error);
@@ -633,7 +714,7 @@ export default {
           precio: data["precio"],
           cantidad: data["cantidad"],
           imagen: data["imagen"],
-          stock:data["stock"]
+          stock: data["stock"]
         });
         me.totalPedido = me.totalPedido + data["precio"] * data["cantidad"];
         Swal.fire({
@@ -681,7 +762,7 @@ export default {
       }
     },
     login(email, password) {
-      let me = this;    
+      let me = this;
       var url = "/usuario/login?email=" + email + "&password=" + password;
       axios
         .get(url)
@@ -715,19 +796,14 @@ export default {
     atras() {
       let me = this;
       me.siguiente = 0;
-    },
-    abrirMapa() {
-      let me = this;
-      me.mapa = true;
     }
   },
   mounted() {
-    // this.recargar=t;
     this.listar(1, this.buscar, this.criterio);
     this.listarCategoria();
-    this.mapa = true;
+    this.geolocate();
+    // this.mapaUbicado();
   }
 };
-
 </script>
   

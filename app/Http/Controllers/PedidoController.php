@@ -43,7 +43,6 @@ class PedidoController extends Controller
         try{            
 
             $ubicacione=new Ubicacione;
-            $ubicacione->ubicacion=$request->ubicacion;
             $ubicacione->latitud=$request->latitud;
             $ubicacione->longitud=$request->longitud;
             $ubicacione->estado='1';

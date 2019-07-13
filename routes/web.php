@@ -21,9 +21,9 @@ Route::get('/',function(){
 
 
 // Route::group(['middleware'=>['auth']],function(){
-    Route::get('/licoreria',function(){
-        return view('contenido/contenido');
-    })->name('registro');
+    // Route::get('/licoreria',function(){
+    //     return view('contenido/contenido');
+    // })->name('registro');
  
 Route::get('/dashboard','DashboardController');
 
@@ -73,4 +73,4 @@ Route::put('/pedido/activar', 'PedidoController@activar');
 // });
 Auth::routes();
    
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/licoreria', 'HomeController@index')->name('home');

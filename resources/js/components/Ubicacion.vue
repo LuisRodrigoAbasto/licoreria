@@ -1,48 +1,95 @@
 <template>
-  <GmapMap
-  v-bind:center="center"
-  v-bind:zoom="7"
-  style="width: 500px; height: 300px"
->
-  <GmapMarker
-    v-bind:key="index"
-    v-for="(m, index) in markers"
-    v-bind:position="m.position"
-    v-bind:clickable="true"
-  />
-</GmapMap>
+  <div>
+    <div>
+      <h2>Search and add a pin</h2>
+      <label>
+        <gmap-autocomplete
+          @place_changed="setPlace">
+        </gmap-autocomplete>
+        <button @click="addMarker">Add</button>
+      </label>
+      <br/>
+
+    </div>
+    <br>
+    <gmap-map
+      center="center"
+      zoom="12"
+      style="width:100%;  height: 400px;"
+    >
+      <gmap-marker
+        :key="index"
+        v-for="(m, index) in markers"
+        position="m.position"
+        clickacle="true"
+        @click="center=m.position"
+      ></gmap-marker>
+    </gmap-map>
+  </div>
 </template>
+
 <script>
-import Vue from 'vue'
-import * as VueGoogleMaps from 'vue2-google-maps'
-export default {
- data() {
-    return {
-   center:{lat:10.0,lng:10.0},
-   markers:[
-     {
-       positition:{lat:10.0,lng:10.0}
-     },
-      {
-        positition:{lat:11.0,lng:11.0}
-      }
-   ]
-
-
- };
- }
-};
+import Vue from "vue";
+import * as VueGoogleMaps from "vue2-google-maps";
 
 Vue.use(VueGoogleMaps, {
-    load: {
-      key: 'AIzaSyCgwFQtMtDvqg2Bgs8qEbqnOidRUL8sPgc&callback',
-      libraries: 'places', // This is required if you use the Autocomplete plugin
-      // OR: libraries: 'places,drawing'
-      // OR: libraries: 'places,drawing,visualization'
-      // (as you require)
-   
-      //// If you want to set the version, you can do so:
-      // v: '3.26',
+  load: {
+    key: "AIzaSyCgwFQtMtDvqg2Bgs8qEbqnOidRUL8sPgc",
+    libraries: "places" // necessary for places input
+  }
+});
+export default {
+name: "GoogleMap",
+  data() {
+    return {
+      // default to Montreal to keep it simple
+      // change this to whatever makes sense
+      center: { lat:-17.7719588, lng:-63.1835792 },
+      markers: [{
+          position:{lat:-17.7719588, lng:-63.1835792 }
+        }
+      ],
+      places: [],
+      currentPlace: null
+    };
+  },
+methods: {
+    // receives a place object via the autocomplete component
+    setPlace(place) {
+      this.currentPlace = place;
     },
-  });
+    addMarker() {
+      if (this.currentPlace) {
+        const marker = {
+          lat: this.currentPlace.geometry.location.lat(),
+          lng: this.currentPlace.geometry.location.lng()
+        };
+        this.markers.push({ position: marker });
+        this.places.push(this.currentPlace);
+        this.center = marker;
+        this.currentPlace = null;
+      }
+    },
+    geolocate: function() {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+      });
+    },
+    mapaUbicado()
+    {
+        this.markers.push({ position: this.center });
+     
+    }
+  },
+  mounted() {
+    this.geolocate();
+    this.mapaUbicado();
+  },
+
+  
+};
+
 </script>

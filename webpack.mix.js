@@ -45,7 +45,7 @@ mix.styles([
     .scripts([
         'resources/plantilla/inicio/js/jquery.min.js',
          'resources/plantilla/inicio/js/bootstrap.min.js',
-         'resources/plantilla/inicio/js/mapa.js',
+        //  'resources/plantilla/inicio/js/mapa.js',
          'resources/plantilla/inicio/js/slick.min.js',
          'resources/plantilla/inicio/js/nouislider.min.js',
          'resources/plantilla/inicio/js/jquery.zoom.min.js',
