@@ -29,7 +29,6 @@
           <i class="fa fa-align-justify"></i> Pedido
           <button
             type="button"
-            @click="mostrarDetalle('pedido','registrar')"
             class="btn btn-secondary"
           >
             <i class="icon-plus"></i>&nbsp;Nuevo
@@ -99,10 +98,12 @@
                   <td>
                     <button
                       type="button"
-                      @click="mostrarDetalle('pedido','actualizar',data)"
+                      @click="mostrarDetalle(data)"
                       class="btn btn-warning btn-sm"
+  data-toggle="modal"
+            data-target="#ModalDetalle"
                     >
-                      <i class="icon-check"></i>
+                      <i class="icon-pencil"></i>
                     </button> &nbsp;
                     <template v-if="data.estado">
                       <button
@@ -156,164 +157,14 @@
           </div>
         </template>
         <!-- Aquiii -->
-        <template v-else-if="listado==0">
-          <div class="card-body">
-            <div class="form-group row border">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label>
-                    Cliente
-                    <span v-show="cliente==''">(*Selecione)</span>
-                  </label>
-                  <v-select
-                    v-model="selectedCliente"
-                    @search="selectCliente"
-                    :options="arrayCliente"
-                    label="cliente"
-                    placeholder="Buscar Cliente..."
-                    @input="getDatosCliente"
-                  />
-                </div>
-              </div>
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label for>
-                    Por Concepto De
-                    <br />
-                  </label>
-                  <input
-                    type="text"
-                    v-model="descripcion"
-                    class="form-control"
-                    placeholder="Descripcion"
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="form-group row border">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label>
-                    Producto
-                    <span v-show="producto==''">(*Selecione)</span>
-                  </label>
-                  <v-select
-                    @search="selectProducto"
-                    label="producto"
-                    :options="arrayProducto"
-                    placeholder="Buscar Productos..."
-                    @input="getDatosProducto"
-                  />
-                </div>
-              </div>
-              <div class="col-md-2">
-                <div class="form-group">
-                  <label for></label>
-                  <button
-                    @click="abrirModal()"
-                    data-toggle="modal"
-                    data-target="#ModalLong"
-                    class="btn btn-success form-control btnagregar"
-                  >
-                    <i class="icon-plus"></i>
-                    <i class="icon-plus"></i>
-                    <i class="icon-plus"></i>
-                  </button>
-                </div>
-              </div>
-              <div class="col-md-2">
-                <div class="form-group">
-                  <label for>Cantidad</label>
-                  <input type="number" value="0" min="0" class="form-control" v-model="cantidad" />
-                </div>
-              </div>
-              <div class="col-md-2">
-                <div class="form-group">
-                  <label for></label>
-                  <button @click="agregarDetalle()" class="btn btn-success form-control btnagregar">
-                    <i class="icon-plus">Agregar</i>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <table class="table table-responsive-sm table-bordered table-striped table-sm">
-              <thead>
-                <tr>
-                  <th>Opciones</th>
-                  <th>ID</th>
-                  <th>Producto</th>
-                  <th>Categoria</th>
-                  <th>Precio</th>
-                  <th>Cantidad</th>
-                  <th>SubTotal</th>
-                </tr>
-              </thead>
-              <tbody v-if="(arrayDetalle.length)">
-                <tr v-for="detalle in arrayDetalle" :key="detalle.id">
-                  <td>
-                    <button
-                      @click="eliminarDetalle(index)"
-                      type="button"
-                      class="btn btn-danger btn-sm"
-                    >
-                      <i class="icon-close"></i>
-                    </button>
-                  </td>
-                  <td>{{ detalle.id }}</td>
-                  <td>{{ detalle.producto }}</td>
-                  <td>{{ detalle.categoria }}</td>
-                  <td>{{ detalle.precio }}</td>
-                  <td>
-                    <input type="number" min="0" v-model="detalle.cantidad" class="form-control" />
-                  </td>
-                  <td>
-                    <span v-text="(detalle.cantidad*detalle.precio).toFixed(2)"></span>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="5">Total</td>
-                  <td>
-                    <button @click="mostrarTotal()" type="button" class="btn btn-primary btn-sm">
-                      <i class="fa fa-spinner fa-spin"></i>
-                    </button>
-                  </td>
-                  <td>
-                    <input type="number" disabled value="0" v-model="monto" class="form-control" />
-                  </td>
-                </tr>
-              </tbody>
-              <tbody v-else>
-                <tr>
-                  <td colspan="8">No hay Productos Agregados</td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="form-group row">
-              <div class="col-md-12">
-                <button type="button" class="btn btn-secondary" @click="ocultarDetalle()">Cerrar</button>
-                <button
-                  type="button"
-                  v-if="tipoAccion==1"
-                  class="btn btn-primary"
-                  @click="registrar()"
-                >Guardar</button>
-                <button
-                  type="button"
-                  v-if="tipoAccion==2"
-                  class="btn btn-primary"
-                  @click="actualizar()"
-                >Actualizar</button>
-              </div>
-            </div>
-          </div>
-        </template>
+     
       </div>
     </div>
     <!-- Modal -->
     <div
       class="modal fade bd-example-modal-lg"
       tabindex="-1"
-      id="ModalLong"
+      id="ModalDetalle"
       role="dialog"
       aria-labelledby="myModalLabel"
       aria-hidden="true"
@@ -321,11 +172,10 @@
       <div class="modal-dialog modal-primary modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle" v-text="tituloModal"></h5>
+            <h5 class="modal-title" id="exampleModalLongTitle"></h5>
             <button
               type="button"
               class="close"
-              @click="cerrarModal()"
               data-dismiss="modal"
               aria-label="Close"
             >
@@ -333,52 +183,35 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="form-group row">
-              <div class="col-md-6">
-                <div class="input-group">
-                  <select class="form-control col-md-3" v-model="criterioP">
-                    <option value="productos">Producto</option>
-                    <option value="categorias">Producto</option>
-                  </select>
-                  <input
-                    type="text"
-                    v-model="buscarP"
-                    @keyup="listarProducto()"
-                    class="form-control"
-                    placeholder="Buscar Producto"
-                  />
-                  <button type="submit" @click="listarProducto()" class="btn btn-primary">
-                    <i class="fa fa-search"></i> Buscar
-                  </button>
-                </div>
-              </div>
-            </div>
             <table class="table table-responsive-sm table-bordered table-striped table-sm">
               <thead>
                 <tr>
-                  <th>Opciones</th>
                   <th>Producto</th>
-                  <th>Stock</th>
-                  <th>Categoria</th>
-                  <th>precio</th>
+                  <th>Precio</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="dataProducto in arrayProducto" :key="dataProducto.id">
-                  <td>
-                    <button
-                      type="button"
-                      @click="agregarDetalleModal(dataProducto)"
-                      class="btn btn-success btn-sm"
-                    >
-                      <i class="icon-check"></i>
-                    </button>
-                  </td>
-                  <td v-text="dataProducto.producto"></td>
-                  <td v-text="dataProducto.stock"></td>
-                  <td v-text="dataProducto.categoria"></td>
-                  <td v-text="dataProducto.precio"></td>
-                </tr>
+                <tr v-for="data in arrayDetalle" :key="data.idProducto">
+           <td><div class="product-widget" >
+									<div class="product-img">
+										<img :src="'imagenes/productos/'+data.imagen" width="100" height="100" alt="">
+									</div>
+									<div class="product-body">
+										<p class="product-category">{{ data.categoria }}</p>
+										<h3 class="product-name"><a href="#">{{ data.producto }}</a></h3>
+										<!-- <h4 class="product-price">Bs. {{ data.precioP }} <del class="product-old-price"></del></h4>
+                    <h5 class="product-price">Cantidad. {{ data.cantidad }} <del class="product-old-price"></del> </h5> -->
+									</div>
+								</div>
+           </td>
+           <td>
+             <div class="product-body">
+										<h4 class="product-price">Bs. {{ data.precioP }} <del class="product-old-price"></del></h4>
+                    <h5 class="product-price">Cantidad. {{ data.cantidad }} <del class="product-old-price"></del> </h5>
+									</div>
+             	<h4 class="product-price">Bs. {{ data.precio }} <del class="product-old-price">$</del></h4>
+           </td>
+            </tr>
               </tbody>
             </table>
           </div>
@@ -419,7 +252,7 @@
           </div>
           <div class="modal-body">
             <div>
-              <gmap-map :center="center" :zoom="8" style="width:100%;  height: 400px;">
+              <gmap-map :center="center" :zoom="12" style="width:100%;  height: 400px;">
                 <gmap-marker
                   :key="index"
                   v-for="(m, index) in markers"
@@ -441,6 +274,8 @@
         </div>
       </div>
     </div>
+
+    
   </main>
 </template>
 <script>
@@ -759,15 +594,14 @@ export default {
         })
         .then(function(response) {
           me.listar(1, "", "cliente");
-          me.limpiarRegistro(1);
+          me.limpiarRegistro();
         })
         .catch(function(error) {
           console.log(error);
         });
     },
-    limpiarRegistro(num) {
+    limpiarRegistro() {
       let me = this;
-      me.listado = num;
       me.id = 0;
       me.idProducto = 0;
       me.idCliente = 0;
@@ -777,7 +611,6 @@ export default {
       me.producto = "";
       me.categoria = "";
       me.idCategoria = 0;
-      me.selectedCliente = null;
     },
     actualizar() {
       if (this.validar()) {
@@ -922,30 +755,17 @@ export default {
       this.stock = "";
       this.selectedCliente = null;
     },
-    mostrarDetalle(modelo, accion, data = []) {
-      switch (modelo) {
-        case "pedido": {
-          switch (accion) {
-            case "registrar": {
-              this.limpiarRegistro(0);
-              this.tipoAccion = 1;
-              break;
-            }
-            case "actualizar": {
-              this.listado = 0;
+    mostrarDetalle(data=[]) {
+      
+              this.limpiarRegistro();
               this.tipoAccion = 2;
               this.id = data["id"];
               this.cliente = data["cliente"];
               this.idCliente = data["idCliente"];
               this.monto = data["monto"];
-              this.descripcion = data["descripcion"];
-              this.selectedCliente = {
-                id: this.idCliente,
-                cliente: this.cliente
-              };
-
+              this.descripcion = data["descripcion"];             
               let me = this;
-              var url = "/pedido7listarPedidos?id=" + data["id"];
+              var url = "/pedido/mostrarDetalle?id=" + data["id"];
               axios
                 .get(url)
                 .then(function(response) {
@@ -955,13 +775,7 @@ export default {
                 .catch(function(error) {
                   console.log(error);
                 });
-
-              break;
-            }
-          }
-        }
-      }
-    },
+          },
     ocultarDetalle() {
       this.listado = 1;
     },

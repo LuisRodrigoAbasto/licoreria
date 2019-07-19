@@ -64,6 +64,7 @@ Route::post('/pedido/registrar', 'PedidoController@store');
 Route::put('/pedido/actualizar', 'PedidoController@update');
 Route::put('/pedido/desactivar', 'PedidoController@desactivar');
 Route::put('/pedido/activar', 'PedidoController@activar');
+Route::get('/pedido/mostrarDetalle', 'PedidoController@mostrarDetalle');
 
 
 // Route::get('/','Auth\LoginController@showLoginForm');

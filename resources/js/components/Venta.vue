@@ -577,11 +577,13 @@ export default {
     agregarDetalleModal(data = []) {
       let me = this;
       if (me.encuentra(data["id"])) {
-        swal({
-          type: "error",
-          title: "Error...",
-          text: "Este Producto ya se Encuentra Agregado!"
-        });
+         Swal.fire({
+              position: "center",
+              type: "El Producto ya se Encuentra Agregado",
+              title: "Error",
+              showConfirmButton: false,
+              timer: 1000
+            });
       } else {
         me.arrayDetalle.push({
           id: data["id"],

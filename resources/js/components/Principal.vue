@@ -215,11 +215,20 @@
                             <i class="icon-plus"></i>
                             <span class="tooltipp">aumentar</span>
                           </button>
+                          <!-- <button
+                            class="quick-view"
+                            data-toggle="modal"
+                            data-target="#ModalProducto"
+                            @click="verProducto(data)"
+                          >
+                            <i class="fa fa-eye"></i>
+                            <span class="tooltipp">Ver Producto</span>
+                          </button> -->
                         </div>
                       </div>
                       <div class="add-to-cart">
                         <button class="add-to-cart-btn" @click="agregarDetalleModal(data)">
-                          <i class="fa fa-shopping-cart"></i> add to cart
+                          <i class="fa fa-shopping-cart"></i> Agregar A Carrito
                         </button>
                       </div>
                     </div>
@@ -383,9 +392,20 @@
                   <a href="#">Terminos & Condiciones</a>
                 </label>
               </div>
-              
-               <a href="#" class="primary-btn order-submit"  data-toggle="modal" data-target="#loginModal" v-if="idCliente==0">Loguearse</a>
-              <a href="#" class="primary-btn order-submit" @click="registrarPedido()" v-else>Ordenar Pedido</a>
+
+              <a
+                href="#"
+                class="primary-btn order-submit"
+                data-toggle="modal"
+                data-target="#loginModal"
+                v-if="idCliente==0"
+              >Loguearse</a>
+              <a
+                href="#"
+                class="primary-btn order-submit"
+                @click="registrarPedido()"
+                v-else
+              >Ordenar Pedido</a>
             </div>
             <!-- /Order Details -->
           </div>
@@ -491,6 +511,107 @@
       </div>
       <!-- /.modal-dialog-->
     </div>
+    <!-- /.modal-->
+    <div
+      class="modal fade"
+      id="ModalProducto"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="myModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">PRODUCTO</h5>
+            <button
+              type="button"
+              class="close"
+              @click="cerrarModal()"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+<div class="row">
+                <!-- product -->
+                <div v-for="(data,index) in arrayProducto" :key="data.id">
+                  <div class="col-md-12 col-xs-12">
+                    <div class="product">
+                      <div class="product-img">
+                        <img :src="'imagenes/productos/'+data.imagen" whith="200" height="200" alt />
+                        <div class="product-label">
+                          <!-- <span class="sale">-30%</span> -->
+                          <span class="new">NEW</span>
+                        </div>
+                      </div>
+                      <div class="product-body">
+                        <p class="product-category">{{ data.categoria }}</p>
+                        <h3 class="product-name">
+                          <a href="#">{{ data.producto }}</a>
+                        </h3>
+                        <h4 class="product-price">
+                          Bs. {{ data.precio }}
+                          <!-- <del class="product-old-price">$990.00</del>-->
+                        </h4>
+                        <div class="product-rating">
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                          <i class="fa fa-star"></i>
+                        </div>
+                        <div class="product-btns">
+                          <button class="add-to-wishlist" @click="disminuirCarrito(index)">
+                            <i class="icon-close"></i>
+                            <span class="tooltipp">disminuir</span>
+                          </button>
+                          <button class="add-to-compare fa-satck">
+                            <i class="fa fa-stack" v-text="data.cantidad"></i>
+                            <span class="tooltipp">Cantidad</span>
+                          </button>
+                          <button class="quick-view" @click="aumentarCarrito(index)">
+                            <i class="icon-plus"></i>
+                            <span class="tooltipp">aumentar</span>
+                          </button>
+                          <button
+                            class="quick-view"
+                            data-toggle="modal"
+                            data-target="#ModalProducto"
+                            @click="verProducto(data)"
+                          >
+                            <i class="fa fa-eye"></i>
+                            <span class="tooltipp">Ver Producto</span>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="add-to-cart">
+                        <button class="add-to-cart-btn" @click="agregarDetalleModal(data)">
+                          <i class="fa fa-shopping-cart"></i> Agregar A Carrito
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+          </div>
+
+          <div class="modal-footer">
+            <!-- <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+            <button
+              class="btn btn-primary"
+              type="button"
+              data-dismiss="modal"
+              @click="agregarUbicacion()"
+            >Aceptar</button>-->
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
  
@@ -518,6 +639,7 @@ export default {
       arrayData: [],
       arrayDetalle: [],
       arrayCategoria: [],
+      arrayProducto: [],
       errorMostrar: 0,
       errorMostrarMsj: [],
       pagination: {
@@ -541,14 +663,14 @@ export default {
       idCliente: 0,
       cliente: "",
       siguiente: 0,
-      ubicacion:'',
+      ubicacion: "",
       latitud: 0,
       longitud: 0,
       stock: 0,
-      center: { lat:-17.3436487, lng: -63.2544467 },
+      center: { lat: -17.3436487, lng: -63.2544467 },
       markers: [
         {
-           position: { lat:-17.3436487, lng: -63.2544467 }
+          position: { lat: -17.3436487, lng: -63.2544467 }
         }
       ],
       places: [],
@@ -608,7 +730,7 @@ export default {
     mapaUbicado() {
       this.markers = [
         {
-          position: { lat:-17.3436487, lng: -63.2544467 }
+          position: { lat: -17.3436487, lng: -63.2544467 }
         }
       ];
       this.markers.push({ position: this.center });
@@ -617,11 +739,10 @@ export default {
       this.geolocate();
       this.mapaUbicado();
     },
-    agregarUbicacion()
-    {
-      this.latitud=this.markers[1].position.lat;
-      this.longitud=this.markers[1].position.lng;
-      this.ubicacion=this.latitud+','+this.longitud;
+    agregarUbicacion() {
+      this.latitud = this.markers[1].position.lat;
+      this.longitud = this.markers[1].position.lng;
+      this.ubicacion = this.latitud + "," + this.longitud;
     },
 
     ///// MAPAS
@@ -666,7 +787,19 @@ export default {
           console.log(error);
         });
     },
-
+    verProducto(data = []) {
+      let me = this;
+      me.arrayProducto = [];
+      me.arrayProducto.push({
+        id: data["id"],
+        producto: data["producto"],
+        categoria: data["categoria"],
+        precio: data["precio"],
+        cantidad: data["cantidad"],
+        imagen: data["imagen"],
+        stock: data["stock"]
+      });
+    },
     registrarPedido() {
       let me = this;
       axios
@@ -678,13 +811,13 @@ export default {
           data: this.arrayDetalle
         })
         .then(function(response) {
-        Swal.fire({
-          position: "center",
-          type: "success",
-          title: "Su Pedido esta Siendo Procesado",
-          showConfirmButton: false,
-          timer: 1500
-        });
+          Swal.fire({
+            position: "center",
+            type: "success",
+            title: "Su Pedido esta Siendo Procesado",
+            showConfirmButton: false,
+            timer: 1500
+          });
           me.listar(1, "", "productos");
           me.atras();
         })

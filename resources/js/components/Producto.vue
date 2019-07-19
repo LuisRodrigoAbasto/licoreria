@@ -81,7 +81,7 @@
                 <td>{{ data.nombre }}</td>
                 <td>{{ data.precio }}</td>
                 <td>{{ data.descripcion }}</td>
-                <td>{{ data.imagen }}</td>
+                <td><img :src="'imagenes/productos/'+data.imagen" width="30" height="30" align="left" alt=""></td>
                 <td>{{ data.stock }}</td>
                 <td>
                   <div v-if="data.estado">

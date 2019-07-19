@@ -21,7 +21,7 @@ class PedidoController extends Controller
         $pedidos= Pedido::join('usuarios','pedidos.idCliente','=','usuarios.id')
         ->join('ubicaciones','pedidos.idUbicacion','=','ubicaciones.id')
         ->select('pedidos.id','pedidos.idCliente',DB::raw("concat(usuarios.nombre,' ',usuarios.apellido) as cliente"),'pedidos.idUbicacion',
-        'ubicaciones.latitud','ubicaciones.longitud','fechaPedido','pedidos.monto')
+        'ubicaciones.latitud','ubicaciones.longitud','fechaPedido','pedidos.monto','pedidos.estado')
         ->where('pedidos.estado','=','1')->orderBy('pedidos.id','desc')->paginate(10);
 
         return [
@@ -38,6 +38,19 @@ class PedidoController extends Controller
         
     }
 
+    public function mostrarDetalle(Request $request)
+    {
+        // if(!$request->ajax()) return redirect('/');
+        $id = $request->id;
+       $detalles=DetallePedido::join('productos','detalle_pedidos.idProducto','=','productos.id')
+       ->join('categorias','productos.idCategoria','=','categorias.id')
+       ->select('productos.nombre as producto','categorias.nombre as categoria','productos.stock','productos.precio as precioP','productos.descripcion',
+       'productos.imagen','productos.estado','detalle_pedidos.cantidad','detalle_pedidos.precio')
+       ->where('detalle_pedidos.idPedido','=',$id)
+       ->get();
+       
+       return ['detalles' => $detalles ]; 
+    }
     
     public function store(Request $request)
     {   
